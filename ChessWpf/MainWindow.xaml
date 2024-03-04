@@ -28,7 +28,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+        <!--TODO: Попробуйте сократить код!-->
         <Button Grid.Column="0" Grid.Row="0" />
         <Button Grid.Column="0" Grid.Row="1" Background="Black"/>
         <Button Grid.Column="0" Grid.Row="2" />
