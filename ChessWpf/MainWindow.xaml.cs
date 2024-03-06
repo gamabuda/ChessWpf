@@ -28,10 +28,9 @@ namespace ChessWpf
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+
         }
-
-
-        public class NotifyPropertyChanged : INotifyPropertyChanged //INotifyPropertyChanged - нужен для того чтобы можно было сообщать интерфейсу о том, что данные поменялись посредством вызова события PropertyChanged.
+        public class NotifyPropertyChanged : INotifyPropertyChanged
         {
             public event PropertyChangedEventHandler PropertyChanged;
             protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -198,18 +197,16 @@ namespace ChessWpf
 
             public MainViewModel()
             {
-
             }
-            public class CellColorConverter : IValueConverter
-            {
-                public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-                    => value is int v && (v % 2 == 0 ^ v / 8 % 2 == 0);
+        }
+        public class CellColorConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+                => value is int v && (v % 2 == 0 ^ v / 8 % 2 == 0);
 
-                public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-                    => null;
-         
-            }
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+                => null;
         }
 
     }
-    }
+}
