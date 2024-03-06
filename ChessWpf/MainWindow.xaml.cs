@@ -15,14 +15,42 @@ using System.Windows.Shapes;
 
 namespace ChessWpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Button button = new Button();
+                    button.Width = 85;
+                    button.Height = 95;
+
+                    if ((i + j) % 2 == 0)
+                    {
+                        button.Background = Brushes.Black;
+                        button.Foreground = Brushes.White;
+                    }
+                    else
+                    {
+                        button.Background = Brushes.White;
+                    }
+
+                    Grid.SetRow(button, i);
+                    Grid.SetColumn(button, j);
+                    grid.Children.Add(button);
+                    button.Click += Button_Click;
+                }
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            btn.Content = "Pawn";
         }
     }
 }
