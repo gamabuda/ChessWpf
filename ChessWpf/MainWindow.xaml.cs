@@ -23,6 +23,15 @@ namespace ChessWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            Button button = new Button();
+            Grid grid = new Grid();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            btn.Content = "Pawn";
         }
     }
 }
