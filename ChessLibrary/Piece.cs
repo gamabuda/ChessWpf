@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace ChessLibrary
 {
-    public class Piece
+    public interface IPiece
     {
-        public Point CurrentPoint { get; set; }
-        public Color Color { get; set; }
-        public State State { get; set; }
+        Cell CurrentPoint { get; set; }
+        Cell DefaultPoint { get; set; }
+        Color Color { get; set; }
+        State State { get; set; }
     }
 }
