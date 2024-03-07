@@ -27,186 +27,81 @@ namespace ChessWpf
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+
 
         }
-        public class NotifyPropertyChanged : INotifyPropertyChanged
-        {
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-                => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public class RelayCommand : ICommand
-        {
-            private readonly Action<object> _execute;
-            private readonly Func<object, bool> _canExecute;
+        private Button selectedPawnButton;
+        private Pawn selectedPawn;
 
-            public event EventHandler CanExecuteChanged
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            // Проверка наличия пешки на нажатой кнопке (вместо btn.Content.ToString() == "Pawn")
+            if (btn.Content != null && btn.Content.ToString() == "Pawn")
             {
-                add { CommandManager.RequerySuggested += value; }
-                remove { CommandManager.RequerySuggested -= value; }
-            }
-
-            public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-            {
-                _execute = execute;
-                _canExecute = canExecute;
-            }
-
-            public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
-            public void Execute(object parameter) => _execute(parameter);
-        }
-        public enum State
-        {
-            Empty,       // пусто
-            WhiteKing,   // король
-            WhiteQueen,  // ферзь
-            WhiteRook,   // ладья
-            WhiteKnight, // конь
-            WhiteBishop, // слон
-            WhitePawn,   // пешка
-            BlackKing,
-            BlackQueen,
-            BlackRook,
-            BlackKnight,
-            BlackBishop,
-            BlackPawn
-        }
-        public class Cell : NotifyPropertyChanged
-        {
-            private State _state;
-            private bool _active;
-
-            public State State
-            {
-                get => _state;
-                set
+                if (selectedPawnButton != null)
                 {
-                    _state = value;
-                    OnPropertyChanged(); // сообщить интерфейсу, что значение поменялось, чтобы интефейс перерисовался в этом месте
+                    // Проверка правильности хода пешки
+                    if (selectedPawn.CheckPawnMove(selectedPawnButton, btn))
+                    {
+                        btn.Content = "Pawn";
+                        selectedPawnButton.Content = "";
+                        selectedPawnButton = null;
+                        selectedPawn = null;
+                    }
+                }
+                else
+                {
+                    selectedPawnButton = btn;
+                    selectedPawn = new Pawn(Grid.GetRow(btn), Grid.GetColumn(btn));
                 }
             }
-            public bool Active // это будет показывать, что ячейка выделена пользователем
+            else if (selectedPawnButton != null)
             {
-                get => _active;
-                set
+                // Перемещение пешки на другую клетку
+                if (selectedPawn.CheckPawnMove(selectedPawnButton, btn))
                 {
-                    _active = value;
-                    OnPropertyChanged();
+                    btn.Content = "Pawn";
+                    selectedPawnButton.Content = "";
+                    selectedPawnButton = null;
+                    selectedPawn = null;
                 }
             }
         }
-        public class Board : IEnumerable<Cell>
+        public class Figure
         {
-            private readonly Cell[,] _area;
+            public int x;
+            public int y;
 
-            public State this[int row, int column]
+            public Figure(int x, int y)
             {
-                get => _area[row, column].State;
-                set => _area[row, column].State = value;
-            }
-
-            public Board()
-            {
-                _area = new Cell[8, 8];
-                for (int i = 0; i < _area.GetLength(0); i++)
-                    for (int j = 0; j < _area.GetLength(1); j++)
-                        _area[i, j] = new Cell();
-            }
-
-            public IEnumerator<Cell> GetEnumerator()
-                => _area.Cast<Cell>().GetEnumerator();
-
-            IEnumerator IEnumerable.GetEnumerator()
-                => _area.GetEnumerator();
-        }
-        public class MainViewModel : NotifyPropertyChanged
-        {
-            private Board _board = new Board();
-            private ICommand _newGameCommand;
-            private ICommand _clearCommand;
-            private ICommand _cellCommand;
-
-            public IEnumerable<char> Numbers => "87654321";
-            public IEnumerable<char> Letters => "ABCDEFGH";
-
-            public Board Board
-            {
-                get => _board;
-                set
-                {
-                    _board = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            public ICommand NewGameCommand => _newGameCommand ??= new RelayCommand(parameter =>
-            {
-                SetupBoard();
-            });
-
-            public ICommand ClearCommand => _clearCommand ??= new RelayCommand(parameter =>
-            {
-                Board = new Board();
-            });
-
-            public ICommand CellCommand => _cellCommand ??= new RelayCommand(parameter =>
-            {
-                Cell cell = (Cell)parameter;
-                Cell activeCell = Board.FirstOrDefault(x => x.Active);
-                if (cell.State != State.Empty)
-                {
-                    if (!cell.Active && activeCell != null)
-                        activeCell.Active = false;
-                    cell.Active = !cell.Active;
-                }
-                else if (activeCell != null)
-                {
-                    activeCell.Active = false;
-                    cell.State = activeCell.State;
-                    activeCell.State = State.Empty;
-                }
-            }, parameter => parameter is Cell cell && (Board.Any(x => x.Active) || cell.State != State.Empty));
-
-            private void SetupBoard()
-            {
-                Board board = new Board();
-                board[0, 0] = State.BlackRook;
-                board[0, 1] = State.BlackKnight;
-                board[0, 2] = State.BlackBishop;
-                board[0, 3] = State.BlackQueen;
-                board[0, 4] = State.BlackKing;
-                board[0, 5] = State.BlackBishop;
-                board[0, 6] = State.BlackKnight;
-                board[0, 7] = State.BlackRook;
-                for (int i = 0; i < 8; i++)
-                {
-                    board[1, i] = State.BlackPawn;
-                    board[6, i] = State.WhitePawn;
-                }
-                board[7, 0] = State.WhiteRook;
-                board[7, 1] = State.WhiteKnight;
-                board[7, 2] = State.WhiteBishop;
-                board[7, 3] = State.WhiteQueen;
-                board[7, 4] = State.WhiteKing;
-                board[7, 5] = State.WhiteBishop;
-                board[7, 6] = State.WhiteKnight;
-                board[7, 7] = State.WhiteRook;
-                Board = board;
-            }
-
-            public MainViewModel()
-            {
+                this.x = x;
+                this.y = y;
             }
         }
-        public class CellColorConverter : IValueConverter
+
+        public class Pawn : Figure
         {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-                => value is int v && (v % 2 == 0 ^ v / 8 % 2 == 0);
+            public Pawn(int x, int y) : base(x, y) { }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-                => null;
+            public bool CheckPawnMove(Button fromButton, Button toButton)
+            {
+                int newX = Grid.GetRow(toButton);
+                int newY = Grid.GetColumn(toButton);
+
+                if (newY != this.y)
+                {
+                    return false; // пешка не может двигаться по горизонтали
+                }
+
+                if (newX == this.x + 1 || (this.x == 1 && newX == 3))
+                {
+                    return true; // пешка может двигаться на одну позицию вперед или на две с начальной позиции
+                }
+
+                return false;
+            }
         }
-
     }
 }

@@ -33,10 +33,10 @@
 		<Button Grid.Column="0" Grid.Row="0" Background="White"/>
 		<Button Grid.Column="0" Grid.Row="1" Background="Red"/>
 		<Button Grid.Column="0" Grid.Row="2" Background="White"/>
-		<Button Grid.Column="0" Grid.Row="3" Background="Red"/>
-		<Button Grid.Column="0" Grid.Row="4" Background="White"/>
-		<Button Grid.Column="0" Grid.Row="5" Background="Red"/>
-		<Button Grid.Column="0" Grid.Row="6" Background="White"/>
+		<Button Grid.Column="0" Grid.Row="3" Background="Red" Click="Button_Click"/>
+		<Button Grid.Column="0" Grid.Row="4" Background="White" Click="Button_Click"/>
+		<Button Grid.Column="0" Grid.Row="5" Background="Red" Click="Button_Click"/>
+		<Button Grid.Column="0" Grid.Row="6" Background="White" Click="Button_Click"/>
 		<Button Grid.Column="0" Grid.Row="7" Background="Red"/>
 		<Button Grid.Column="1" Grid.Row="0" Background="Red"/>
 		<Button Grid.Column="1" Grid.Row="1" Background="White"/>
