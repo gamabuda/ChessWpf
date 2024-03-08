@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChessLib\ChessLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="icon.png" />
   </ItemGroup>
 
