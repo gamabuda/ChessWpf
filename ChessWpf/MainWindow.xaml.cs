@@ -43,15 +43,25 @@ namespace ChessWpf
                     if (i % 2 != j % 2) btn.Background = Brushes.Black;
                     else btn.Background = Brushes.White;
 
-                    btn.HorizontalContentAlignment = HorizontalAlignment.Left;
-                    btn.VerticalContentAlignment = VerticalAlignment.Top;
-
+                    btn.HorizontalContentAlignment = HorizontalAlignment.Center;
+                    btn.VerticalContentAlignment = VerticalAlignment.Center;
+                    btn.Foreground = Brushes.Red;
+                   
                     Grid.SetRow(btn, j);
                     Grid.SetColumn(btn, i);
 
+                    btn.Click += ButtonClick;
                     Field.Children.Add(btn);
                 }
             }
+        }
+
+        private void ButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            if (Convert.ToString(btn.Content) != "Pawn") btn.Content = "Pawn";
+            else btn.Content = "";
         }
     }
 }
