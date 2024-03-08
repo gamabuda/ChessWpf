@@ -20,18 +20,27 @@ namespace ChessWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            Button button = new Button();
-            Grid grid = new Grid();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             btn.Content = "Pawn";
         }
+        public enum State
+        {
+            Empty,       // пусто
+            WhiteKing,   // король
+            WhiteQueen,  // ферзь
+            WhiteRook,   // ладья
+            WhiteKnight, // конь
+            WhiteBishop, // слон
+            WhitePawn,   // пешка
+            BlackKing,
+            BlackQueen,
+            BlackRook,
+            BlackKnight,
+            BlackBishop,
+            BlackPawn
+        }
+
     }
 }
