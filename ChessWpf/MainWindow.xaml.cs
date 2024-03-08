@@ -23,12 +23,35 @@ namespace ChessWpf
         public MainWindow()
         {
             InitializeComponent();
+            FieldCreate();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void FieldCreate()
         {
-            var btn = sender as Button;
-            btn.Content = "Pawn";
+            for (int i = 0; i < 8; i++)
+            {
+                RowDefinition row = new RowDefinition();
+                ColumnDefinition column = new ColumnDefinition();
+
+                Field.RowDefinitions.Add(row);
+                Field.ColumnDefinitions.Add(column);
+
+                for (int j = 0; j < 8; j++)
+                {
+                    Button btn = new Button();
+
+                    if (i % 2 != j % 2) btn.Background = Brushes.Black;
+                    else btn.Background = Brushes.White;
+
+                    btn.HorizontalContentAlignment = HorizontalAlignment.Left;
+                    btn.VerticalContentAlignment = VerticalAlignment.Top;
+
+                    Grid.SetRow(btn, j);
+                    Grid.SetColumn(btn, i);
+
+                    Field.Children.Add(btn);
+                }
+            }
         }
     }
 }
