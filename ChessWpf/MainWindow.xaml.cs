@@ -20,30 +20,70 @@ namespace ChessWpf
         public MainWindow()
         {
             InitializeComponent();
+            InitializeBoard();
+        }
 
-            for (int i = 0; i < 8; i++)
+        private void InitializeBoard()
+        {
+            for (int i = 1; i < 9; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 1; j < 9; j++)
                 {
                     Button button = new Button();
-                    button.Width = 85;
-                    button.Height = 95;
+                    button.BorderBrush = Brushes.Transparent;
+                    button.FontWeight = FontWeights.Bold;
+                    button.FontSize = 16;
+                    button.Width = 70;
+                    button.Height = 70;
 
                     if ((i + j) % 2 == 0)
-                    {
-                        button.Background = Brushes.Black;
-                        button.Foreground = Brushes.White;
-                    }
+                        button.Background = Brushes.SaddleBrown;
                     else
-                    {
-                        button.Background = Brushes.White;
-                    }
+                        button.Background = Brushes.Ivory;
 
                     Grid.SetRow(button, i);
                     Grid.SetColumn(button, j);
                     grid.Children.Add(button);
+
                     button.Click += Button_Click;
                 }
+            }
+
+            char letter = 'A';
+
+            for (int i = 1; i < 9; i++)
+            {
+                Label label = new Label();
+
+                label.Width = 70;
+                label.Height = 70;
+                label.Foreground = Brushes.Black;
+                label.Content = letter;
+                label.HorizontalContentAlignment = HorizontalAlignment.Center;
+                label.VerticalContentAlignment = VerticalAlignment.Center;
+                label.FontSize = 30;
+
+                Grid.SetRow(label, 0);
+                Grid.SetColumn(label, i);
+                grid.Children.Add(label);
+                letter++;
+            }
+
+            for (int j = 1; j < 9; j++)
+            {
+                Label label = new Label();
+
+                label.Width = 70;
+                label.Height = 70;
+                label.Foreground = Brushes.Black;
+                label.Content = j;
+                label.HorizontalContentAlignment = HorizontalAlignment.Center;
+                label.VerticalContentAlignment = VerticalAlignment.Center;
+                label.FontSize = 30;
+
+                Grid.SetRow(label, j);
+                Grid.SetColumn(label, 0);
+                grid.Children.Add(label);
             }
         }
 
