@@ -14,7 +14,6 @@ namespace ChessLibrary.Pieces
         public Cell CurrentPosition { get; set; }
         public Color Color { get; set; }
         public State State { get; set; }
-        public bool isActive { get; set; }
         public List<(int, int)> AvailableMoves { get; set; }
         private List<(int, int)> PossibleDirections = new List<(int, int)>
         {
@@ -25,29 +24,30 @@ namespace ChessLibrary.Pieces
 
         public Pawn(Cell currentPosition, Color color)
         {
+            AvailableMoves = new List<(int, int)>();
             CurrentPosition = currentPosition;
-            StartPosition = currentPosition;
+            StartPosition = CurrentPosition;
             Color = color;
             State = color == Color.Black ? State.BlackPawn : State.WhitePawn;
         }
 
-        public List<(int, int)> CalculatePossibleMoves(Board board)
+        public void CalculatePossibleMoves(Board board)
         {
-            List<(int, int)> moves = new List<(int, int)>();
+            AvailableMoves.Clear();
+            int k = Color == Color.White ? -1 : 1;
             foreach (var direction in PossibleDirections)
             {
-                int newVertical = CurrentPosition.VerticalPosition + direction.Item1;
-                int newHorizontal = CurrentPosition.HorizontalPosition + direction.Item2;
-                if (board[newVertical, newHorizontal].CurrentState == State.Empty)
+                int newRow = CurrentPosition.RowPosition + direction.Item1 * k;
+                int newCollumn = CurrentPosition.CollumnPosition + direction.Item2 * k;
+                if (board[newRow, newCollumn].CurrentState == State.Empty)
                 {
-                    moves.Add((newVertical, newHorizontal));
+                    AvailableMoves.Add((newRow, newCollumn));
                 }
             }
-            if (CurrentPosition == StartPosition)
+            if (CurrentPosition.RowPosition == StartPosition.RowPosition)
             {
-                moves.Add((CurrentPosition.VerticalPosition + 2, CurrentPosition.HorizontalPosition));
+                AvailableMoves.Add((CurrentPosition.RowPosition + (2 * k), CurrentPosition.CollumnPosition));
             }
-            return moves;
         }
     }
 }

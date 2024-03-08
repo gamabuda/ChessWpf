@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="ChessWpf" MinHeight="800" MinWidth="800" Height="800" Width="800">
+
+    <Window.Resources>
+        <Image x:Key="BlackBishop" Source="/BlackBishop.png"></Image>
+        <Image x:Key="BlackKing" Source="/BlackKing.png"></Image>
+        <Image x:Key="BlackKnight" Source="/BlackKnight.png"></Image>
+        <Image x:Key="BlackPawn" Source="/BlackPawn.png"></Image>
+        <Image x:Key="BlackQueen" Source="/BlackQueen.png"></Image>
+        <Image x:Key="BlackRook" Source="/BlackRook.png"></Image>
+        <Image x:Key="WhiteBishop" Source="/WhiteBishop.png"></Image>
+        <Image x:Key="WhiteKing" Source="/WhiteKing.png"></Image>
+        <Image x:Key="WhiteKnight" Source="/WhiteKnight.png"></Image>
+        <Image x:Key="WhitePawn" Source="/WhitePawn.png"></Image>
+        <Image x:Key="WhiteQueen" Source="/WhiteQueen.png"></Image>
+        <Image x:Key="WhiteRook" Source="/WhiteRook.png"></Image>
+        <Image x:Key="CanMoveCell" Source="/CanMoveCell.png"></Image>
+    </Window.Resources>
+
     <Grid MinWidth="800" MinHeight="800">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>

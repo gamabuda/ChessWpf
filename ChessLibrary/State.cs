@@ -20,6 +20,7 @@ namespace ChessLibrary
         BlackKnight,
         BlackBishop,
         BlackQueen,
-        BlackKing
+        BlackKing,
+        CanMoveCell
     }
 }

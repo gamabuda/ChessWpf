@@ -8,7 +8,41 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="BlackBishop.png" />
+    <None Remove="BlackKing.png" />
+    <None Remove="BlackKnight.png" />
+    <None Remove="BlackPawn.png" />
+    <None Remove="BlackQueen.png" />
+    <None Remove="BlackRook.png" />
+    <None Remove="CanMoveCell.png" />
+    <None Remove="WhiteBishop.png" />
+    <None Remove="WhiteKing.png" />
+    <None Remove="WhiteKnight.png" />
+    <None Remove="WhitePawn.png" />
+    <None Remove="WhiteQueen.png" />
+    <None Remove="WhiteRook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ChessLibrary\ChessLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="BlackBishop.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="BlackKing.png" />
+    <Resource Include="BlackKnight.png" />
+    <Resource Include="BlackPawn.png" />
+    <Resource Include="BlackQueen.png" />
+    <Resource Include="BlackRook.png" />
+    <Resource Include="CanMoveCell.png" />
+    <Resource Include="WhiteBishop.png" />
+    <Resource Include="WhiteKing.png" />
+    <Resource Include="WhiteKnight.png" />
+    <Resource Include="WhitePawn.png" />
+    <Resource Include="WhiteQueen.png" />
+    <Resource Include="WhiteRook.png" />
   </ItemGroup>
 
 </Project>

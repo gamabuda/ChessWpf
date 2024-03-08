@@ -12,7 +12,7 @@ namespace ChessLibrary
     {
         public static List<IPiece> DefaultPieceList = new List<IPiece>()
         {
-            new Pawn(new Cell(0, 0), Color.White)
+            new Pawn(new Cell(7, 0), Color.White),
         };
     }
 }

@@ -13,6 +13,6 @@ namespace ChessLibrary
         Color Color { get; set; }
         State State { get; set; }
         List<(int, int)> AvailableMoves { get; set; }
-        bool isActive { get; set; }
+        void CalculatePossibleMoves(Board board);
     }
 }

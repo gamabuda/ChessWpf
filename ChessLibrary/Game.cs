@@ -9,22 +9,43 @@ namespace ChessLibrary
 {
     public class Game
     {
-        Board board;
+        public Board board { get; set; }
         Player[] players;
+        public IPiece CurrentActivePiece { get; set; }
+        public Cell CurrentActiveCell { get; set; }
 
-        public void InitializeBoard()
-        {
-            board = new Board();
-            board.PlacePieces(PieceLists.DefaultPieceList);
-        }
-
-        private void InitPlayers()
+        public Game()
         {
             players = new Player[2]
             {
                 new Player(Color.White, "WhitePlayer", PieceLists.DefaultPieceList),
                 new Player(Color.Black, "BlackPlayer", PieceLists.DefaultPieceList)
             };
+        }
+
+        public void StartGame()
+        {
+            InitializeBoard();
+        }
+
+        public void InitializeBoard()
+        {
+            board = new Board(players[0], players[1]);
+            board.PlacePieces();
+        }
+
+        public void DoInactive()
+        {
+            CurrentActiveCell.DeletePiece();
+            CurrentActiveCell = null;
+            CurrentActivePiece = null;
+            foreach(var cell in board)
+            {
+                if(cell.CurrentState == State.CanMoveCell)
+                {
+                    cell.CurrentState = State.Empty;
+                }
+            }
         }
     }
 }

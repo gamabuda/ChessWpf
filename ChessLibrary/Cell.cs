@@ -3,34 +3,33 @@ using System.Runtime.CompilerServices;
 
 namespace ChessLibrary
 {
-    public class Cell: INotifyPropertyChanged
+    public class Cell
     {
         private State _currentState;
         private IPiece _piece;
-        public State CurrentState { get => _currentState; set { _currentState = value; OnPropertyChange(); } }
-        public IPiece Piece { get => _piece; set { _piece = value; OnPropertyChange(); } }
-        public int HorizontalPosition {  get; private set; }
-        public int VerticalPosition { get; private set; }
-        public string canMove { get; set; }
+        public State CurrentState { get => _currentState; set { _currentState = value; } }
+        public IPiece Piece { get => _piece; set { _piece = value; } }
+        public int RowPosition {  get; private set; }
+        public int CollumnPosition { get; private set; }
+        public bool isActive { get; set; }
  
         public Cell(int Horizontal, int Vertical)
         {
-            HorizontalPosition = Horizontal;
-            VerticalPosition = Vertical;
+            RowPosition = Horizontal;
+            CollumnPosition = Vertical;
             CurrentState = State.Empty;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChange([CallerMemberName] String propertyName = " ")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public void PutPiece(IPiece piece)
         {
             Piece = piece;
             CurrentState = piece.State;
+            piece.CurrentPosition = this;
+        }
+
+        public void DeletePiece()
+        {
+            Piece = null;
+            CurrentState = State.Empty;
         }
     }
 }
