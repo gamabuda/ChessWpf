@@ -9,9 +9,10 @@ namespace ChessLibrary
 {
     public interface IPiece
     {
-        Cell CurrentPoint { get; set; }
-        Cell DefaultPoint { get; set; }
+        Cell CurrentPosition { get; set; }
         Color Color { get; set; }
         State State { get; set; }
+        List<(int, int)> AvailableMoves { get; set; }
+        bool isActive { get; set; }
     }
 }

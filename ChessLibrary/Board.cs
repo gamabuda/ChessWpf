@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,14 @@ namespace ChessLibrary
                 {
                     _board[i, j] = new Cell(i, j);
                 }
+            }
+        }
+
+        public void PlacePieces(List<IPiece> piecelist)
+        {
+            foreach(var piece in piecelist)
+            {
+                this[piece.CurrentPosition.VerticalPosition, piece.CurrentPosition.VerticalPosition].CurrentState = piece.State;
             }
         }
     }
