@@ -27,7 +27,6 @@ namespace ChessWpf
         }
         public enum State
         {
-            Empty,       // пусто
             WhiteKing,   // король
             WhiteQueen,  // ферзь
             WhiteRook,   // ладья
