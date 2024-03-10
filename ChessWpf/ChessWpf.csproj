@@ -7,4 +7,22 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+	<ItemGroup>
+		<None Remove="PawnBlack.png" />
+		<None Remove="PawnWhite.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ChessConsole\ChessConsole.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<Resource Include="PawnBlack.png">
+			<CopyToOutputDirectory></CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="PawnWhite.png">
+			<CopyToOutputDirectory></CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
 </Project>
