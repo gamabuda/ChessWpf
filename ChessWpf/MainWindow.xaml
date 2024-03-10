@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="ChessWpf" MinHeight="450" MinWidth="500" Height="450" Width="500">
-    <Grid>
+    <Grid x:Name="ChessGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
