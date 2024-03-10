@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="ChessWpf" MinHeight="450" MinWidth="500" Height="450" Width="500">
-    <Grid>
+    <Grid x:Name="Desk">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -29,69 +29,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--TODO: Попробуйте сократить код!-->
-        <Button Grid.Column="0" Grid.Row="0" />
-        <Button Grid.Column="0" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="0" Grid.Row="2" />
-        <Button Grid.Column="0" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="0" Grid.Row="4" />
-        <Button Grid.Column="0" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="0" Grid.Row="6" />
-        <Button Grid.Column="0" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="0" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="1"/>
-        <Button Grid.Column="1" Grid.Row="2" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="3"/>
-        <Button Grid.Column="1" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="5"/>
-        <Button Grid.Column="1" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="7" />
-        <Button Grid.Column="2" Grid.Row="0"/>
-        <Button Grid.Column="2" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="2" />
-        <Button Grid.Column="2" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="4"/>
-        <Button Grid.Column="2" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="6"/>
-        <Button Grid.Column="2" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="0" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="1"/>
-        <Button Grid.Column="3" Grid.Row="2" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="3" />
-        <Button Grid.Column="3" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="5"/>
-        <Button Grid.Column="3" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="7" />
-        <Button Grid.Column="4" Grid.Row="0"/>
-        <Button Grid.Column="4" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="2"/>
-        <Button Grid.Column="4" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="4"/>
-        <Button Grid.Column="4" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="6"/>
-        <Button Grid.Column="4" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="0" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="1"/>
-        <Button Grid.Column="5" Grid.Row="2" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="3"/>
-        <Button Grid.Column="5" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="5"/>
-        <Button Grid.Column="5" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="7" />
-        <Button Grid.Column="6" Grid.Row="0"/>
-        <Button Grid.Column="6" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="2"/>
-        <Button Grid.Column="6" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="4"/>
-        <Button Grid.Column="6" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="6" />
-        <Button Grid.Column="6" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="0" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="1"/>
-        <Button Grid.Column="7" Grid.Row="2" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="3"/>
-        <Button Grid.Column="7" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="5"/>
-        <Button Grid.Column="7" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="7"/>
+        
     </Grid>
 </Window>
