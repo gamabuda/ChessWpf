@@ -51,5 +51,7 @@
        Stroke="Black" Fill="Black" Margin="97,53,0,1" HorizontalAlignment="Left" Width="100" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Row="1" />
         <Rectangle Name="rectangle12"
             Stroke="Black" Fill="Black" Margin="97,49,0,5" HorizontalAlignment="Left" Width="100" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Row="1" />
+        <Rectangle Name="rectangle13"
+    Stroke="Black" Fill="Black" Margin="0,1,0,52" HorizontalAlignment="Center" Width="100" Grid.RowSpan="2" Grid.Row="3" />
     </Grid>
 </Window>
