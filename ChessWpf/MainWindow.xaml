@@ -7,23 +7,32 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="ChessWpf" MinHeight="800" MinWidth="800" Height="800" Width="800">
-    <Grid MinWidth="800" MinHeight="800">
+    <Grid x:Name="Field" MinWidth="600" MinHeight="600">
         <Grid.ColumnDefinitions>
-        
+
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-        
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+
         </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
         
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
             <RowDefinition></RowDefinition>
-        
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            
         </Grid.RowDefinitions>
 
-        <Grid x:Name="Field" Grid.Row="1" Grid.Column="1"/>
     </Grid>
 </Window>

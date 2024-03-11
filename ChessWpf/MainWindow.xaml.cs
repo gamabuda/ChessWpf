@@ -20,6 +20,8 @@ namespace ChessWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int fieldSizing = 8;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,40 +30,47 @@ namespace ChessWpf
 
         private void FieldCreate()
         {
-            for (int i = 0; i < 8; i++)
+            for (int row = 0; row < fieldSizing; row++)
             {
-                RowDefinition row = new RowDefinition();
-                ColumnDefinition column = new ColumnDefinition();
-
-                Field.RowDefinitions.Add(row);
-                Field.ColumnDefinitions.Add(column);
-
-                for (int j = 0; j < 8; j++)
+                for (int column = 0; column < fieldSizing; column++)
                 {
-                    Button btn = new Button();
+                    var placement = new Button();
+                    if (row % 2 != column % 2)
+                    {
+                        placement.Background = Brushes.Beige;
+                        Tag = new ChessSquare(row, column);
+                    }
+                    else placement.Background = Brushes.SaddleBrown;
 
-                    if (i % 2 != j % 2) btn.Background = Brushes.Black;
-                    else btn.Background = Brushes.White;
+                    Grid.SetRow(placement, row);
+                    Grid.SetColumn(placement, column);
 
-                    btn.HorizontalContentAlignment = HorizontalAlignment.Center;
-                    btn.VerticalContentAlignment = VerticalAlignment.Center;
-                    btn.Foreground = Brushes.Red;
-                   
-                    Grid.SetRow(btn, j);
-                    Grid.SetColumn(btn, i);
+                    placement.Click += ButtonClick;
 
-                    btn.Click += ButtonClick;
-                    Field.Children.Add(btn);
+                    Field.Children.Add(placement);
                 }
             }
         }
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
+            var button = (Button)sender;
+            var placement = (ChessSquare)button.Tag;
 
-            if (Convert.ToString(btn.Content) != "Pawn") btn.Content = "Pawn";
-            else btn.Content = "";
+            if (Convert.ToString(button.Content) != "Pawn") button.Content = "Pawn";
+            else button.Content = "";
+        }
+
+        public class ChessSquare 
+        {
+            public int Row { get; }
+            public int Column { get; }
+
+            public ChessSquare(int row, int column)
+            {
+                Row = row;
+                Column = column;
+            }
         }
     }
 }
