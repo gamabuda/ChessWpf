@@ -37,11 +37,10 @@ namespace ChessWpf
             }
             else
             {
-                // Перемещаем пешку на новую клетку
+                
                 Grid.SetColumn(button, Grid.GetColumn(selectedButton));
                 Grid.SetRow(button, Grid.GetRow(selectedButton));
 
-                // Очищаем текущую выбранную пешку
                 selectedButton.Content = null;
                 selectedButton = null;
             }
