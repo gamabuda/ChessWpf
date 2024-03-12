@@ -23,8 +23,8 @@ namespace ChessWpf
         private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
         private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
         private const int boardSize = 8;
-        private Button[,] squares = new Button[boardSize, boardSize]; // Для доступа к квадратам по индексам
-        private ChessSquare selectedSquare = null; // Для хранения выбранной пешки
+        private Button[,] squares = new Button[boardSize, boardSize]; 
+        private ChessSquare selectedSquare = null; 
 
         public MainWindow()
         {
@@ -41,7 +41,7 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
-                        Content = row == 6 ? "P" : string.Empty, 
+                        Content = row == 6 ? "P" : string.Empty,
                         Tag = new ChessSquare(row, col)
                     };
 
@@ -49,7 +49,7 @@ namespace ChessWpf
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
                     chessBoard.Children.Add(square);
-                    squares[row, col] = square; 
+                    squares[row, col] = square;
                 }
             }
         }
@@ -59,14 +59,14 @@ namespace ChessWpf
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
 
-            // Если пешка уже выбрана и клик произошел по другому квадрату
+           
             if (selectedSquare != null && (selectedSquare.Row != square.Row || selectedSquare.Column != square.Column))
             {
-                // Перемещаем пешку, если ход допустим
+                
                 MovePawn(square);
-                selectedSquare = null; // Сбрасываем выбранную пешку
+                selectedSquare = null; 
             }
-            else if (button.Content.ToString() == "P") // Если кликнули на пешку, выбираем её
+            else if (button.Content.ToString() == "P") 
             {
                 selectedSquare = square;
             }
@@ -74,11 +74,22 @@ namespace ChessWpf
 
         private void MovePawn(ChessSquare toSquare)
         {
-            // Проверка допустимости хода
-            if (Math.Abs(toSquare.Row - selectedSquare.Row) == 1 && toSquare.Column == selectedSquare.Column)
+            
+            int rowDifference = toSquare.Row - selectedSquare.Row;
+            int columnDifference = Math.Abs(toSquare.Column - selectedSquare.Column);
+
+            
+            bool isForwardMove = rowDifference < 0;
+            bool isInitialMove = !selectedSquare.HasPawnMoved && rowDifference == -2 && columnDifference == 0; // Движение на 2 клетки из начальной позиции
+            bool isRegularMove = rowDifference == -1 && columnDifference == 0; // Обычное движение на 1 клетку
+
+            // ход пешки
+            if ((isForwardMove && (isInitialMove || isRegularMove)) && squares[toSquare.Row, toSquare.Column].Content.ToString() == string.Empty) 
             {
-                squares[selectedSquare.Row, selectedSquare.Column].Content = string.Empty; // Предыдущая пешка убирается
-                squares[toSquare.Row, toSquare.Column].Content = "P"; // Пешка ставится на новое место
+                squares[selectedSquare.Row, selectedSquare.Column].Content = string.Empty; 
+                squares[toSquare.Row, toSquare.Column].Content = "P";
+                selectedSquare.HasPawnMoved = true; 
+                toSquare.HasPawnMoved = true;
             }
         }
     }
@@ -87,10 +98,12 @@ namespace ChessWpf
 {
     public int Row { get; }
     public int Column { get; }
+    public bool HasPawnMoved { get; set; }
 
     public ChessSquare(int row, int column)
     {
         Row = row;
         Column = column;
+        HasPawnMoved = false; 
     }
 }
