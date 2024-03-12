@@ -10,9 +10,13 @@ namespace ChessLib.Interfaces
 {
     public interface IFigure
     {
+        char Figure { get; set; }
         public Cell Position { get; set; }
-        Color Color { get; set; }
+        string Color { get; set; }
         bool isActive { get; set; }
-        public List<(int, int)> CalculateAvailableMoves(Board board);
+        public List<(int, int)> CalculateAvailableMoves(Cell cell);
+
+        public bool Move(Cell currentPos, Cell cell);
+        
     }
 }

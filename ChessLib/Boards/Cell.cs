@@ -15,20 +15,22 @@ namespace ChessLib.Boards
             get => figure;
             set
             {
-                if (isFilled)
+                if (!isFilled)
                     figure = value;
                 else
                     figure = null;
             }
         }
 
-        public int HorizontalPosition { get; private set; }
-        public int VerticalPosition { get; private set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
         public bool isAtacked { get; set; }
         public bool isFilled { get; set; }
 
-        public Cell()
+        public Cell(int row, int column)
         {
+            Row = row;
+            Column = column;
             isAtacked = false;
             isFilled = false;
         }

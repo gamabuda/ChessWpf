@@ -21,21 +21,26 @@ namespace ChessLib.Boards
         {
             _board = new Cell[8, 8];
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 1; i < 9; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 1; j < 9; j++)
                 {
-                    _board[i, j] = new Cell();
+                    _board[i, j] = new Cell(i, j);
                 }
             }
         }
 
-        public void UpdateFigures(List<IFigure> figuresList)
+        //public void UpdateFigures(List<IFigure> figuresList)
+        //{
+        //    foreach (var figure in figuresList)
+        //    {
+        //        this[figure.Position.Row, figure.Position.Column].isFilled = true;
+        //    }
+        //}
+
+        public void UpdateFigure(IFigure figure)
         {
-            foreach (var figure in figuresList)
-            {
-                this[figure.Position.VerticalPosition, figure.Position.VerticalPosition].isFilled = true;
-            }
+            this[figure.Position.Row, figure.Position.Column].isFilled = true;
         }
     }
 }

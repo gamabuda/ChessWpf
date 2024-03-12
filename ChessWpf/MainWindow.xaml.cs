@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ChessLib.Boards;
+using ChessLib.Figures;
+using ChessLib.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +20,9 @@ namespace ChessWpf
 {
     public partial class MainWindow : Window
     {
+        Cell Position { get; set; }
+        Button PrevPress { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,31 +31,30 @@ namespace ChessWpf
 
         private void InitializeBoard()
         {
-            for (int i = 1; i < 9; i++)
+            for (int row = 1; row < 9; row++)
             {
-                for (int j = 1; j < 9; j++)
+                for (int col = 1; col < 9; col++)
                 {
-                    Button button = new Button();
-                    button.BorderBrush = Brushes.Transparent;
-                    button.FontSize = 36;
-                    button.Width = 70;
-                    button.Height = 70;
+                    var square = new Button
+                    {
+                        Background = (row + col) % 2 == 0 ? Brushes.SaddleBrown : (Brush)new BrushConverter().ConvertFrom("#D6B994"),
+                        Tag = new Cell(row, col),
+                        BorderBrush = Brushes.Transparent,
+                        FontSize = 36,
+                        Width = 70,
+                        Height = 70
+                    };
 
-                    if ((i + j) % 2 == 0)
-                        button.Background = Brushes.SaddleBrown;
-                    else
-                        button.Background = (Brush)new BrushConverter().ConvertFrom("#D6B994");
+                    if (row == 1 || row == 2)
+                        ArrangeFigures(square, "black", row, col);
+                    else if (row == 7 || row == 8)
+                        ArrangeFigures(square, "white", row, col);
 
-                    if (i == 1 || i == 2)
-                        ArrangeFigures(button, "black", i, j);
-                    else if (i == 7 || i == 8)
-                        ArrangeFigures(button, "white", i, j);
+                    Grid.SetRow(square, row);
+                    Grid.SetColumn(square, col);
+                    grid.Children.Add(square);
 
-                    Grid.SetRow(button, i);
-                    Grid.SetColumn(button, j);
-                    grid.Children.Add(button);
-
-                    button.Click += Button_Click;
+                    square.Click += Button_Click;
                 }
             }
 
@@ -88,8 +93,6 @@ namespace ChessWpf
                 letter++;
             }
 
-            char digit = '8';
-
             for (int j = 1; j < 9; j++)
             {
                 Label label = new Label();
@@ -97,7 +100,7 @@ namespace ChessWpf
                 label.Width = 70;
                 label.Height = 70;
                 label.Foreground = Brushes.DimGray;
-                label.Content = digit;
+                label.Content = j;
                 label.HorizontalContentAlignment = HorizontalAlignment.Center;
                 label.VerticalContentAlignment = VerticalAlignment.Center;
                 label.FontSize = 30;
@@ -111,7 +114,7 @@ namespace ChessWpf
                 label2.Width = 70;
                 label2.Height = 70;
                 label2.Foreground = Brushes.DimGray;
-                label2.Content = digit;
+                label2.Content = j;
                 label2.HorizontalContentAlignment = HorizontalAlignment.Center;
                 label2.VerticalContentAlignment = VerticalAlignment.Center;
                 label2.FontSize = 30;
@@ -119,14 +122,13 @@ namespace ChessWpf
                 Grid.SetRow(label2, j);
                 Grid.SetColumn(label2, 9);
                 grid.Children.Add(label2);
-
-                digit--;
             }
         }
 
         private void ArrangeFigures(object sender, string playerColor, int i, int j)
         {
-            var button = sender as Button;
+            var button = (Button)sender;
+            var square = (Cell)button.Tag;
 
             if (playerColor.ToLower().Trim() == "black")
             {
@@ -144,7 +146,17 @@ namespace ChessWpf
                 else if (i == 1 && j == 5)
                     button.Content = "♔";
                 else if (i == 2)
-                    button.Content = "♙";
+                {
+                    Pawn pawn = new Pawn(square, "black", i-1000);
+                    button.Content = pawn.Figure;
+                    square.Row = i;
+                    square.Column = j;
+                    Position = square;
+                    Position.Figure = pawn;
+                    square.isFilled = true;
+                    square.Figure.Color = "black";
+                }
+                    
             }
             else if (playerColor.ToLower().Trim() == "white")
             {
@@ -162,7 +174,16 @@ namespace ChessWpf
                 else if (i == 8 && j == 5)
                     button.Content = "♔";
                 else if (i == 7)
-                    button.Content = "♙";
+                {
+                    Pawn pawn = new Pawn(square, "white", i+1000);
+                    button.Content = pawn.Figure;
+                    square.Row = i;
+                    square.Column = j;
+                    Position = square;
+                    Position.Figure = pawn;
+                    square.isFilled = true;
+                    square.Figure.Color = "white";
+                }
             }
             else
                 throw new Exception("Incorrect player's color");
@@ -170,11 +191,38 @@ namespace ChessWpf
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = (Button)sender;
+            var square = (Cell)button.Tag;
 
-            button.Content = button.Content == null ? "♙" : null;
-            button.FontWeight = FontWeights.Bold;
+            //MessageBox.Show($"You clicked on square: {square.Row}, {square.Column}");            
 
+            button.Content = null;
+            if (square.isFilled == false)
+            {
+                bool moved = Move(button);
+                PrevPress.Content = moved ? ' ' : Position.Figure.Figure;
+                if (!moved)
+                    MessageBox.Show($"Ход невозможен!");
+            }
+            else
+            {
+                PrevPress = button;
+                Position = square;
+                Position.Row = square.Row;
+                Position.Column = square.Column;
+            }
         }
+
+        private bool Move(Button button)
+        {
+            var square = (Cell)button.Tag;
+
+            bool moved = Position.Figure.Move(Position, square);
+            button.Content = moved ? Position.Figure.Figure : null;
+            button.FontWeight = Position.Figure.Color == "black" ? FontWeights.Bold : FontWeights.Light;
+            button.Foreground = Position.Figure.Color == "black" ? Brushes.Black : Brushes.White;
+            return moved;
+        }
+
     }
 }
