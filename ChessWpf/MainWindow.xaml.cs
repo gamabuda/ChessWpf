@@ -39,10 +39,13 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
-                        Tag = new ChessSquare(row, col)
+                        Tag = new ChessSquare(row, col),
+                        Content = row == 7 ? "Pawn" : String.Empty
                     };
 
+                    square.Click += Move_Click;
                     square.Click += Square_Click;
+                    
 
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
@@ -51,12 +54,29 @@ namespace ChessWpf
                 }
             }
         }
+        Button? selectedBtn;
         private void Square_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
 
-            MessageBox.Show($"You clicked on square: {square.Row}, {square.Column}");
+            MessageBox.Show($"You clicked on square {button.Content}: {square.Row}, {square.Column}");
+
+            if (button.Content != null)
+                selectedBtn = button;
+        }
+
+        private void Move_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var square = (ChessSquare)button.Tag;
+
+            if (selectedBtn == null)
+                return;
+
+            button.Content = selectedBtn.Content;
+            selectedBtn.Content = String.Empty;
+            selectedBtn = null;
         }
     }
 }
