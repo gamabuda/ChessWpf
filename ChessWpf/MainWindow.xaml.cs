@@ -26,6 +26,7 @@ namespace ChessWpf
         private Button[,] squares = new Button[boardSize, boardSize]; 
         private ChessSquare selectedSquare = null; 
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,7 +42,7 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
-                        Content = row == 6 ? "P" : string.Empty,
+                        Content = row == 6 ? "P" : string.Empty, FontSize = 40,
                         Tag = new ChessSquare(row, col)
                     };
 
@@ -71,6 +72,8 @@ namespace ChessWpf
                 selectedSquare = square;
             }
         }
+
+
 
         private void MovePawn(ChessSquare toSquare)
         {
