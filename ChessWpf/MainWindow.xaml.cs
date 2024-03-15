@@ -15,79 +15,12 @@ using System.Windows.Shapes;
 
 namespace ChessWpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
-        private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
-        private const int boardSize = 8;
         public MainWindow()
         {
-            InitializeComponent();
 
-            InitializeBoard();
         }
 
-        private void InitializeBoard()
-        {
-            for (int row = 0; row < boardSize; row++)
-            {
-                for (int col = 0; col < boardSize; col++)
-                {
-                    var square = new Button
-                    {
-                        Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
-                        Tag = new ChessSquare(row, col),
-                        Content = row == 7 ? "Pawn" : String.Empty
-                    };
-
-                    square.Click += Move_Click;
-                    square.Click += Square_Click;
-                    
-
-                    Grid.SetRow(square, row);
-                    Grid.SetColumn(square, col);
-
-                    chessBoard.Children.Add(square);
-                }
-            }
-        }
-        Button? selectedBtn;
-        private void Square_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
-
-            MessageBox.Show($"You clicked on square {button.Content}: {square.Row}, {square.Column}");
-
-            if (button.Content != null)
-                selectedBtn = button;
-        }
-
-        private void Move_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
-
-            if (selectedBtn == null)
-                return;
-
-            button.Content = selectedBtn.Content;
-            selectedBtn.Content = String.Empty;
-            selectedBtn = null;
-        }
-    }
-}
-public class ChessSquare
-{
-    public int Row { get; }
-    public int Column { get; }
-
-    public ChessSquare(int row, int column)
-    {
-        Row = row;
-        Column = column;
     }
 }
