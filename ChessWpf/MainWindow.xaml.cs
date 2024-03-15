@@ -15,79 +15,120 @@ using System.Windows.Shapes;
 
 namespace ChessWpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
-        private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
-        private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
-        private const int boardSize = 8;
+
+        private const int BoardSize = 8;
+        private const int TileSize = 50;
+
+        private List<Rectangle> squares = new List<Rectangle>();
+        private List<Image> pawns = new List<Image>();
+
+        private SolidColorBrush lightBrush = new SolidColorBrush(Colors.White);
+        private SolidColorBrush darkBrush = new SolidColorBrush(Colors.Gray);
+        private SolidColorBrush highlightBrush = new SolidColorBrush(Colors.LightGreen);
+
+        private int selectedPawnIndex = -1;
+        private int selectedCellIndex = -1;
+
         public MainWindow()
         {
             InitializeComponent();
-
-            InitializeBoard();
+            DrawChessboard();
+            DrawPawns();
         }
 
-        private void InitializeBoard()
+        private void DrawChessboard()
         {
-            for (int row = 0; row < boardSize; row++)
+            for (int i = 0; i < BoardSize; i++)
             {
-                for (int col = 0; col < boardSize; col++)
+                for (int j = 0; j < BoardSize; j++)
                 {
-                    var square = new Button
+                    Rectangle square = new Rectangle
                     {
-                        Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
-                        Tag = new ChessSquare(row, col),
-                        Content = row == 7 ? "Pawn" : String.Empty
+                        Width = TileSize,
+                        Height = TileSize,
+                        Fill = (i + j) % 2 == 0 ? lightBrush : darkBrush
                     };
 
-                    square.Click += Move_Click;
-                    square.Click += Square_Click;
-                    
+                    Canvas.SetLeft(square, j * TileSize);
+                    Canvas.SetTop(square, i * TileSize);
 
-                    Grid.SetRow(square, row);
-                    Grid.SetColumn(square, col);
+                    chessboardCanvas.Children.Add(square);
+                    squares.Add(square);
 
-                    chessBoard.Children.Add(square);
+                    int index = i * BoardSize + j;
+                    square.MouseLeftButtonDown += (sender, e) => Square_Clicked(index);
                 }
             }
         }
-        Button? selectedBtn;
-        private void Square_Click(object sender, RoutedEventArgs e)
+
+        private void DrawPawns()
         {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
+            string pawnImagePath = "C:\\Users\\user\\source\\repos\\ChessWpf\\ChessWpf\\pngwing.com (6).png";
 
-            MessageBox.Show($"You clicked on square {button.Content}: {square.Row}, {square.Column}");
+            for (int i = 0; i < BoardSize; i++)
+            {
+                Image pawn = new Image
+                {
+                    Source = new BitmapImage(new Uri(pawnImagePath)),
+                    Width = TileSize,
+                    Height = TileSize,
+                    Stretch = Stretch.Fill
+                };
 
-            if (button.Content != null)
-                selectedBtn = button;
+                Canvas.SetLeft(pawn, i * TileSize);
+                Canvas.SetTop(pawn, (BoardSize - 2) * TileSize);
+
+                chessboardCanvas.Children.Add(pawn);
+                pawns.Add(pawn);
+
+                int index = i;
+                pawn.MouseLeftButtonDown += (sender, e) => Pawn_Clicked(index);
+            }
         }
 
-        private void Move_Click(object sender, RoutedEventArgs e)
+        private void Pawn_Clicked(int index)
         {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
+            if (selectedPawnIndex == -1)
+            {
+                selectedPawnIndex = index;
+                squares[index + (BoardSize - 2) * BoardSize].Fill = highlightBrush;
+            }
+            else
+            {
+                squares[selectedPawnIndex + (BoardSize - 2) * BoardSize].Fill = (selectedPawnIndex % 2 == 0) ? lightBrush : darkBrush;
 
-            if (selectedBtn == null)
-                return;
+                selectedCellIndex = index + (BoardSize - 2) * BoardSize;
+                MovePawn();
+            }
+        }
 
-            button.Content = selectedBtn.Content;
-            selectedBtn.Content = String.Empty;
-            selectedBtn = null;
+        private void Square_Clicked(int index)
+        {
+            if (selectedPawnIndex != -1)
+            {
+                squares[selectedPawnIndex + (BoardSize - 2) * BoardSize].Fill = (selectedPawnIndex % 2 == 0) ? lightBrush : darkBrush;
+
+                selectedCellIndex = index;
+                MovePawn();
+            }
+        }
+
+        private void MovePawn()
+        {
+            int row = selectedCellIndex / BoardSize;
+            int col = selectedCellIndex % BoardSize;
+
+            Canvas.SetLeft(pawns[selectedPawnIndex], col * TileSize);
+            Canvas.SetTop(pawns[selectedPawnIndex], row * TileSize);
+
+            squares[selectedCellIndex].Fill = (row + col) % 2 == 0 ? lightBrush : darkBrush;
+
+            selectedPawnIndex = -1;
+            selectedCellIndex = -1;
         }
     }
 }
-public class ChessSquare
-{
-    public int Row { get; }
-    public int Column { get; }
 
-    public ChessSquare(int row, int column)
-    {
-        Row = row;
-        Column = column;
-    }
-}
