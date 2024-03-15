@@ -8,15 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="icon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ChessLib\ChessLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="icon.png" />
+    <Folder Include="Icons\" />
   </ItemGroup>
 
 </Project>
