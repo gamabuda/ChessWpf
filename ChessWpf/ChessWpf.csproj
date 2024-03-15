@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -21,6 +21,10 @@
     <None Remove="Assets\Images\WhitePawn.png" />
     <None Remove="Assets\Images\WhiteQueen.png" />
     <None Remove="Assets\Images\WhiteRook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

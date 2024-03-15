@@ -2,7 +2,7 @@
 {
     public class Knight : Piece
     {
-        public override PieceType Type => PieceType.Bishop;
+        public override PieceType Type => PieceType.Knight;
         public override Player Color { get; }
 
         public Knight(Player color)
