@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,135 +12,133 @@ using System.Windows.Shapes;
 
 namespace ChessWpf
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
-        private ChessPiece selectedChessPiece;
+        private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
+        private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
+        private const int boardSize = 8;
         public MainWindow()
         {
             InitializeComponent();
-            InitializeChessboard();
+
+            InitializeBoard();
         }
 
-        private void InitializeChessboard()
+        private void InitializeBoard()
         {
-            for (int i = 0; i < 8; i++)
+            for (int row = 0; row < boardSize; row++)
             {
-                AddChessPiece(new Pawn(i, 1), i, 1);
-                AddChessPiece(new Pawn(i, 6), i, 6);
+                for (int col = 0; col < boardSize; col++)
+                {
+                    var square = new Button
+                    {
+                        Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
+                        Tag = new ChessSquare(row, col),
+                        Content = GetInitialPiece(row, col)
+                    };
+
+                    square.Click += Move_Click;
+                    square.Click += Square_Click;
+
+                    Grid.SetRow(square, row);
+                    Grid.SetColumn(square, col);
+
+                    chessBoard.Children.Add(square);
+                }
             }
         }
 
-        private void AddChessPiece(ChessPiece chessPiece, int column, int row)
+        private string GetInitialPiece(int row, int col)
         {
-            TextBlock textBlock = new TextBlock
+            if (row == 6)
+                return "♟";
+            else if (row == 1)
+                return "♙";
+            else if (row == 0)
             {
-                Text = GetPictureByChessPiece(chessPiece),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            Grid.SetColumn(textBlock, chessPiece.x);
-            Grid.SetRow(textBlock, chessPiece.y);
-            textBlock.MouseLeftButtonDown += ChessPiece_Click;
-            ChessGrid.Children.Add(textBlock);
-        }
-
-        private string GetPictureByChessPiece(ChessPiece chessPiece)
-        {
-            switch (chessPiece)
-            {
-                case Pawn _:
-                    return "♙";
-                case King _:
-                    return "♔";
-                case Ferz _:
-                    return "♕";
-                case Ladiya _:
+                if (col == 0 || col == 7)
                     return "♖";
-                case Slon _:
-                    return "♗";
-                case Kon _:
+                else if (col == 1 || col == 6)
                     return "♘";
-                default:
-                    return "";
+                else if (col == 2 || col == 5)
+                    return "♗";
+                else if (col == 3)
+                    return "♕";
+                else if (col == 4)
+                    return "♔";
             }
-        }
-
-        private void ChessPiece_Click(object sender, MouseButtonEventArgs e)
-        {
-            var textBlock = sender as TextBlock;
-            int column = Grid.GetColumn(textBlock);
-            int row = Grid.GetRow(textBlock);
-            selectedChessPiece = GetChessPieceAtPosition(column, row);
-
-            if (selectedChessPiece != null)
+            else if (row == 7)
             {
-                Console.WriteLine($"Selected ChessPiece at ({column}, {row})");
+                if (col == 0 || col == 7)
+                    return "♜";
+                else if (col == 1 || col == 6)
+                    return "♞";
+                else if (col == 2 || col == 5)
+                    return "♝";
+                else if (col == 3)
+                    return "♛";
+                else if (col == 4)
+                    return "♚";
             }
+            return String.Empty;
         }
-
-        private ChessPiece GetChessPieceAtPosition(int column, int row)
+        Button? selectedBtn;
+        private void Square_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var chessPiece in ChessGrid.Children)
-            {
-                if (chessPiece is TextBlock textBlock && Grid.GetColumn(textBlock) == column && Grid.GetRow(textBlock) == row)
-                {
-                    return GetChessPieceByPicture(textBlock.Text, column, row);
-                }
-            }
-            return null;
+            var button = (Button)sender;
+            var square = (ChessSquare)button.Tag;
+
+            MessageBox.Show($"You clicked on square {button.Content}: {square.Row}, {square.Column}");
+
+            if (button.Content != null)
+                selectedBtn = button;
         }
 
-        private ChessPiece GetChessPieceByPicture(string unicode, int x, int y)
+        private void Move_Click(object sender, RoutedEventArgs e)
         {
-            switch (unicode)
-            {
-                case "♙":
-                    return new Pawn(x, y);
-                default:
-                    return null;
-            }
-        }
+            var button = (Button)sender;
+            var square = (ChessSquare)button.Tag;
 
-        private void UpdChessPiecePosition(ChessPiece chessPiece, int column, int row)
-        {
-            ChessGrid.Children.Remove(GetTextBlockAtPosition(chessPiece.x, chessPiece.y));
-            AddChessPiece(chessPiece, column, row);
-        }
-
-        private TextBlock GetTextBlockAtPosition(int x, int y)
-        {
-            foreach (var chessPiece in ChessGrid.Children)
+            if (selectedBtn == null)
             {
-                if (chessPiece is TextBlock textBlock && Grid.GetColumn(textBlock) == x && Grid.GetRow(textBlock) == y)
-                {
-                    return textBlock;
-                }
-            }
-            return null;
-        }
+                if (string.IsNullOrEmpty(button.Content as string))
+                    return;
+                if (button.Content.ToString() != "♙" && button.Content.ToString() != "♟")
+                    return;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            int column = Grid.GetColumn(button);
-            int row = Grid.GetRow(button);
+                selectedBtn = button;
+                return;
+            }
 
-            if (selectedChessPiece != null)
+            if (button == selectedBtn)
+                return;
+
+            var selectedSquare = (ChessSquare)selectedBtn.Tag;
+
+            if ((selectedBtn.Content.ToString() == "♙" && square.Column == selectedSquare.Column &&
+                (square.Row == selectedSquare.Row + 1 || (selectedSquare.Row == 1 && square.Row == selectedSquare.Row + 2))) ||
+                (selectedBtn.Content.ToString() == "♟" && square.Column == selectedSquare.Column &&
+                (square.Row == selectedSquare.Row - 1 || (selectedSquare.Row == 6 && square.Row == selectedSquare.Row - 2))))
             {
-                if (selectedChessPiece.Move(column, row))
-                {
-                    UpdChessPiecePosition(selectedChessPiece, column, row);
-                    selectedChessPiece = null;
-                }
-                else
-                {
-                    MessageBox.Show("Invalid move for the selected piece!");
-                }
+                button.Content = selectedBtn.Content;
+                selectedBtn.Content = String.Empty;
             }
-            else
-            {
-                MessageBox.Show("Select a piece by clicking on it before making a move.");
-            }
+
+            selectedBtn = null;
         }
+    }
+}
+public class ChessSquare
+{
+    public int Row { get; }
+    public int Column { get; }
+
+    public ChessSquare(int row, int column)
+    {
+        Row = row;
+        Column = column;
     }
 }
