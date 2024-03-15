@@ -3,8 +3,40 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Images\BlackBishop.png" />
+    <None Remove="Assets\Images\BlackKing.png" />
+    <None Remove="Assets\Images\BlackKnight.png" />
+    <None Remove="Assets\Images\BlackPawn.png" />
+    <None Remove="Assets\Images\BlackQueen.png" />
+    <None Remove="Assets\Images\BlackRook.png" />
+    <None Remove="Assets\Images\board.png" />
+    <None Remove="Assets\Images\WhiteBishop.png" />
+    <None Remove="Assets\Images\WhiteKing.png" />
+    <None Remove="Assets\Images\WhiteKnight.png" />
+    <None Remove="Assets\Images\WhitePawn.png" />
+    <None Remove="Assets\Images\WhiteQueen.png" />
+    <None Remove="Assets\Images\WhiteRook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\BlackBishop.png" />
+    <Resource Include="Assets\Images\BlackKing.png" />
+    <Resource Include="Assets\Images\BlackKnight.png" />
+    <Resource Include="Assets\Images\BlackPawn.png" />
+    <Resource Include="Assets\Images\BlackQueen.png" />
+    <Resource Include="Assets\Images\BlackRook.png" />
+    <Resource Include="Assets\Images\board.png" />
+    <Resource Include="Assets\Images\WhiteBishop.png" />
+    <Resource Include="Assets\Images\WhiteKing.png" />
+    <Resource Include="Assets\Images\WhiteKnight.png" />
+    <Resource Include="Assets\Images\WhitePawn.png" />
+    <Resource Include="Assets\Images\WhiteQueen.png" />
+    <Resource Include="Assets\Images\WhiteRook.png" />
+  </ItemGroup>
 
 </Project>

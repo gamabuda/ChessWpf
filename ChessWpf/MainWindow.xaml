@@ -6,27 +6,10 @@
         xmlns:local="clr-namespace:ChessWpf"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="ChessWpf" MinHeight="450" MinWidth="500" Height="450" Width="500">
+        Title="ChessWpf" MinHeight="400" MinWidth="400" Height="800" Width="800">
     <Grid x:Name="chessBoard">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/Images/board.png"/>
+        </Grid.Background>
     </Grid>
 </Window>
