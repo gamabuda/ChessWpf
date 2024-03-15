@@ -10,6 +10,19 @@
             Color = color;
         }
 
+        private static readonly Directions[] dirs = new Directions[]
+        {
+            Directions.UpLeft,
+            Directions.UpRight,
+            Directions.DownRight,
+            Directions.DownLeft
+        };
+
+        public override IEnumerable<Move> GetMoves(Poses from, GameField gameField)
+        {
+            return MovePositionsInDirs(from, gameField, dirs).Select(to => new NormalMove(from, to));
+        }
+
         public override Piece Copy()
         {
             Bishop copy = new Bishop(Color);

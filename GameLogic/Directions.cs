@@ -25,7 +25,7 @@
             return new Directions(a.RowDelta + b.RowDelta, a.ColDelta + b.ColDelta);
         }
 
-        public static Directions operator +(int scalar, Directions direct)
+        public static Directions operator *(int scalar, Directions direct)
         {
             return new Directions(scalar * direct.RowDelta, scalar * direct.ColDelta);
         }
