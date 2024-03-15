@@ -20,9 +20,9 @@ namespace ChessWpf
 {
     public partial class MainWindow : Window
     {
-        Cell Position { get; set; }
+        IFigure CurrentFigure { get; set; }
         Button PrevPress { get; set; }
-
+        Button[,] Board { get; set; } = new Button[10, 10];
         public MainWindow()
         {
             InitializeComponent();
@@ -55,6 +55,7 @@ namespace ChessWpf
                     grid.Children.Add(square);
 
                     square.Click += Button_Click;
+                    Board[row, col] = square;
                 }
             }
 
@@ -147,16 +148,15 @@ namespace ChessWpf
                     button.Content = "♔";
                 else if (i == 2)
                 {
-                    Pawn pawn = new Pawn(square, "black", i-1000);
+                    Pawn pawn = new Pawn(square, "black");
                     button.Content = pawn.Figure;
-                    square.Row = i;
-                    square.Column = j;
-                    Position = square;
-                    Position.Figure = pawn;
+                    square.Figure = pawn;
+                    square.Figure.Position.Row = i;
+                    square.Figure.Position.Column = j;
                     square.isFilled = true;
                     square.Figure.Color = "black";
                 }
-                    
+
             }
             else if (playerColor.ToLower().Trim() == "white")
             {
@@ -175,12 +175,11 @@ namespace ChessWpf
                     button.Content = "♔";
                 else if (i == 7)
                 {
-                    Pawn pawn = new Pawn(square, "white", i+1000);
+                    Pawn pawn = new Pawn(square, "white");
                     button.Content = pawn.Figure;
-                    square.Row = i;
-                    square.Column = j;
-                    Position = square;
-                    Position.Figure = pawn;
+                    square.Figure = pawn;
+                    square.Figure.Position.Row = i;
+                    square.Figure.Position.Column = j;
                     square.isFilled = true;
                     square.Figure.Color = "white";
                 }
@@ -194,33 +193,63 @@ namespace ChessWpf
             var button = (Button)sender;
             var square = (Cell)button.Tag;
 
-            //MessageBox.Show($"You clicked on square: {square.Row}, {square.Column}");            
+            //MessageBox.Show($"You clicked on figure: {square.Figure}");
 
-            button.Content = null;
-            if (square.isFilled == false)
+            //button.Content = null;
+            if (!square.isFilled && CurrentFigure != null)
             {
                 bool moved = Move(button);
-                PrevPress.Content = moved ? ' ' : Position.Figure.Figure;
+                PrevPress.Content = moved ? ' ' : CurrentFigure.Figure;
+
                 if (!moved)
                     MessageBox.Show($"Ход невозможен!");
+                square.Figure = CurrentFigure;
+                square.isFilled = true;
+                CurrentFigure = null;
+
+                foreach (var item in Board)
+                {
+                    if (item != null)
+                    {
+                        Cell cell = (Cell)item.Tag;
+                        item.Background = (cell.Row + cell.Column) % 2 == 0 ? Brushes.SaddleBrown : (Brush)new BrushConverter().ConvertFrom("#D6B994");
+                    }
+                }
             }
-            else
+            else if (square.isFilled)
             {
                 PrevPress = button;
-                Position = square;
-                Position.Row = square.Row;
-                Position.Column = square.Column;
+                CurrentFigure = square.Figure;
+                CurrentFigure.Position.Row = square.Row;
+                CurrentFigure.Position.Column = square.Column;
+
+                List<(int, int)> moves = CurrentFigure.CalculateAvailableMoves();
+                foreach (var move in moves)
+                {
+                    foreach (var item in Board)
+                    {
+                        if (item != null)
+                        {
+                            Cell cell = (Cell)item.Tag;
+                            if (cell.Row == move.Item1 && cell.Column == move.Item2)
+                                item.Background = Brushes.LightGreen;
+                        }
+                    }
+                }
             }
+            else if (CurrentFigure == null)
+                MessageBox.Show($"Сначала выберите фигуру!");
         }
 
         private bool Move(Button button)
         {
             var square = (Cell)button.Tag;
 
-            bool moved = Position.Figure.Move(Position, square);
-            button.Content = moved ? Position.Figure.Figure : null;
-            button.FontWeight = Position.Figure.Color == "black" ? FontWeights.Bold : FontWeights.Light;
-            button.Foreground = Position.Figure.Color == "black" ? Brushes.Black : Brushes.White;
+            bool moved = CurrentFigure.Move(square);
+            button.Content = moved ? CurrentFigure.Figure : null;
+            button.FontWeight = CurrentFigure.Color == "black" ? FontWeights.Bold : FontWeights.Light;
+            button.Foreground = CurrentFigure.Color == "black" ? Brushes.Black : Brushes.White;
+
             return moved;
         }
 

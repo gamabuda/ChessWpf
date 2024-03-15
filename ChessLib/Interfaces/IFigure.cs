@@ -14,9 +14,9 @@ namespace ChessLib.Interfaces
         public Cell Position { get; set; }
         string Color { get; set; }
         bool isActive { get; set; }
-        public List<(int, int)> CalculateAvailableMoves(Cell cell);
+        public List<(int, int)> CalculateAvailableMoves();
 
-        public bool Move(Cell currentPos, Cell cell);
+        public bool Move(Cell cell);
         
     }
 }
