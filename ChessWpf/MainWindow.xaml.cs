@@ -23,10 +23,11 @@ namespace ChessWpf
         private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
         private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
         private const int boardSize = 8;
+        private Pawn[,] chessboard_list = new Pawn[boardSize, boardSize];
         public MainWindow()
         {
             InitializeComponent();
-
+            chessboard_list[0, 0] = new Pawn(0, 0);
             InitializeBoard();
         }
 
@@ -40,13 +41,15 @@ namespace ChessWpf
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
                         Tag = new ChessSquare(row, col),
-                        Content = row == 7 ? "Pawn" : String.Empty
+                        Content = (chessboard_list[row, col] != null) ? "Pawn" : String.Empty
                     };
 
-                    square.Click += Move_Click;
+                    if(chessboard_list[row, col] != null)
+                    {
+                        square.Content = "Pawn";
+                    }
                     square.Click += Square_Click;
                     
-
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
 
@@ -54,29 +57,49 @@ namespace ChessWpf
                 }
             }
         }
-        Button? selectedBtn;
+        Pawn selectedpawn;
         private void Square_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
 
-            MessageBox.Show($"You clicked on square {button.Content}: {square.Row}, {square.Column}");
-
-            if (button.Content != null)
-                selectedBtn = button;
-        }
-
-        private void Move_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
-
-            if (selectedBtn == null)
+            if (chessboard_list[square.Column, square.Row] != null)
+            {
+                selectedpawn = chessboard_list[square.Column, square.Row];
                 return;
+            }
 
-            button.Content = selectedBtn.Content;
-            selectedBtn.Content = String.Empty;
-            selectedBtn = null;
+            if(selectedpawn != null)
+            {
+                if(selectedpawn.Try2Move(square.Column, square.Row))
+                {
+                    foreach (Button b in chessBoard.Children)
+                    {
+                        var s = (ChessSquare)b.Tag;
+                        if (s.Column == selectedpawn.x && s.Row == selectedpawn.y)
+                        {
+                            b.Content = "";
+                        }
+                    }
+
+                    chessboard_list[selectedpawn.x, selectedpawn.y] = null;
+                    selectedpawn.y = square.Row;
+                    selectedpawn.x = square.Column;
+                    chessboard_list[square.Column, square.Row] = selectedpawn;
+
+                    selectedpawn = null;
+                    foreach(Button b in chessBoard.Children)
+                    {
+                        var s = (ChessSquare)b.Tag;
+                        if(s.Column == square.Column && s.Row == square.Row)
+                        {
+                            b.Content = "Pawn";
+                        }
+                    }
+                }
+            }
+
+            //MessageBox.Show($"You clicked on square {button.Content}: {square.Row}, {square.Column}");
         }
     }
 }
@@ -89,5 +112,22 @@ public class ChessSquare
     {
         Row = row;
         Column = column;
+    }
+}
+
+public class Pawn
+{
+    public int x;
+    public int y;
+
+    public Pawn(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public bool Try2Move(int newX, int newY)
+    {
+        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) <= 1);
     }
 }
