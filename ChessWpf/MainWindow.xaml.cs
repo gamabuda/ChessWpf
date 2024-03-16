@@ -42,7 +42,7 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
-                        Content = row == 6 ? "P" : string.Empty, FontSize = 40,
+                        Content = row == 6 ? "♙" : string.Empty, FontSize = 40,
                         Tag = new ChessSquare(row, col)
                     };
 
@@ -67,7 +67,7 @@ namespace ChessWpf
                 MovePawn(square);
                 selectedSquare = null; 
             }
-            else if (button.Content.ToString() == "P") 
+            else if (button.Content.ToString() == "♙") 
             {
                 selectedSquare = square;
             }
@@ -90,7 +90,7 @@ namespace ChessWpf
             if ((isForwardMove && (isInitialMove || isRegularMove)) && squares[toSquare.Row, toSquare.Column].Content.ToString() == string.Empty) 
             {
                 squares[selectedSquare.Row, selectedSquare.Column].Content = string.Empty; 
-                squares[toSquare.Row, toSquare.Column].Content = "P";
+                squares[toSquare.Row, toSquare.Column].Content = "♙";
                 selectedSquare.HasPawnMoved = true; 
                 toSquare.HasPawnMoved = true;
             }
