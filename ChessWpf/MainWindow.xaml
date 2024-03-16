@@ -10,10 +10,18 @@
     <Viewbox>
         <Grid x:Name="Board"
             Width = "800"
-            Height = "800">
+            Height = "800"
+            MouseDown="Board_MouseDown">
             <Grid.Background>
                 <ImageBrush ImageSource="Assets/Images/board.png"/>
             </Grid.Background>
+
+            <UniformGrid 
+                x:Name="CoverGrid"
+                Columns="8"
+                Rows="8">
+            </UniformGrid>
+
 
             <UniformGrid x:Name="PiecesGrid"
                          Columns="8"

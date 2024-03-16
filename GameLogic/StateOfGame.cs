@@ -20,7 +20,7 @@
             return piece.GetMoves(pos, GameField);
         }
 
-        public void Makeove(Move move)
+        public void MakeMove(Move move)
         {
             move.Execute(GameField);
             CurrentPlayer = CurrentPlayer.Opponent();
