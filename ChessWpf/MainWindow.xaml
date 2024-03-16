@@ -7,19 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="ChessWpf" MinHeight="450" MinWidth="500" Height="450" Width="500">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+    <Grid x:Name="chessBoard">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -29,114 +17,16 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <!--TODO: Попробуйте сократить код!-->
-        <Button Grid.Column="1" Grid.Row="1" />
-        <Button Grid.Column="1" Grid.Row="2" Background="Black" Click="Button_Click"/>
-        <Button Grid.Column="1" Grid.Row="3" />
-        <Button Grid.Column="1" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="5" />
-        <Button Grid.Column="1" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="1" Grid.Row="7" />
-        <Button Grid.Column="1" Grid.Row="8" Content="♖" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="2" Click="Button_Click"/>
-        <Button Grid.Column="2" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="4"/>
-        <Button Grid.Column="2" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="6"/>
-        <Button Grid.Column="2" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="2" Grid.Row="8" />
-        <Button Grid.Column="3" Grid.Row="1"/>
-        <Button Grid.Column="3" Grid.Row="2"  Background="Black" Click="Button_Click"/>
-        <Button Grid.Column="3" Grid.Row="3" />
-        <Button Grid.Column="3" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="5"/>
-        <Button Grid.Column="3" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="3" Grid.Row="7"/>
-        <Button Grid.Column="3" Grid.Row="8" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="2" Click="Button_Click"/>
-        <Button Grid.Column="4" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="4" />
-        <Button Grid.Column="4" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="6"/>
-        <Button Grid.Column="4" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="4" Grid.Row="8" />
-        <Button Grid.Column="5" Grid.Row="1"/>
-        <Button Grid.Column="5" Grid.Row="2" Background="Black" Click="Button_Click"/>
-        <Button Grid.Column="5" Grid.Row="3"/>
-        <Button Grid.Column="5" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="5"/>
-        <Button Grid.Column="5" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="5" Grid.Row="7"/>
-        <Button Grid.Column="5" Grid.Row="8" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="2" Click="Button_Click"/>
-        <Button Grid.Column="6" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="4"/>
-        <Button Grid.Column="6" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="6"/>
-        <Button Grid.Column="6" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="6" Grid.Row="8" />
-        <Button Grid.Column="7" Grid.Row="1"/>
-        <Button Grid.Column="7" Grid.Row="2" Background="Black" Click="Button_Click"/>
-        <Button Grid.Column="7" Grid.Row="3"/>
-        <Button Grid.Column="7" Grid.Row="4" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="5"/>
-        <Button Grid.Column="7" Grid.Row="6" Background="Black"/>
-        <Button Grid.Column="7" Grid.Row="7" />
-        <Button Grid.Column="7" Grid.Row="8" Background="Black"/>
-        <Button Grid.Column="8" Grid.Row="1" Background="Black"/>
-        <Button Grid.Column="8" Grid.Row="2" Click="Button_Click"/>
-        <Button Grid.Column="8" Grid.Row="3" Background="Black"/>
-        <Button Grid.Column="8" Grid.Row="4"/>
-        <Button Grid.Column="8" Grid.Row="5" Background="Black"/>
-        <Button Grid.Column="8" Grid.Row="6"/>
-        <Button Grid.Column="8" Grid.Row="7" Background="Black"/>
-        <Button Grid.Column="8" Grid.Row="8"/>
-
-        <Label Grid.Row="9" Grid.Column="1" Content="a" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="2" Content="b" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="3" Content="c" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="4" Content="d" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="5" Content="e" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="6" Content="f" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="7" Content="g" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="9" Grid.Column="8" Content="h" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-
-        <Label Grid.Row="9" Background="beige"></Label>
-        <Label Grid.Row="8"  Content="1" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="7"  Content="2" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="6"  Content="3" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="5"  Content="4" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="4"  Content="5" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="3"  Content="6" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="2"  Content="7" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-        <Label Grid.Row="1"  Content="8" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="beige"></Label>
-
-        <StackPanel  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="1" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="2" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="3" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="4" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="5" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="6" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="7" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="8" Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Background="beige"></StackPanel>
-        
-
-        <StackPanel Grid.Column="9" Grid.Row="1"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="2"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="3"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="4"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="5"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="6"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="7"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="8"  Background="beige"></StackPanel>
-        <StackPanel Grid.Column="9" Grid.Row="9"  Background="beige"></StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
     </Grid>
 </Window>

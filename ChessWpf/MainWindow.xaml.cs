@@ -20,16 +20,90 @@ namespace ChessWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
+        private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
+        private const int boardSize = 8;
+        private Button moveToButton;
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            InitializeBoard();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void InitializeBoard()
         {
-            var btn = sender as Button;
-            btn.Content = "♟";
+            for (int row = 0; row < boardSize; row++)
+            {
+                for (int col = 0; col < boardSize; col++)
+                {
+                    var square = new Button
+                    {
+                        Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
+                        Tag = new ChessSquare(row, col),
+                        Content = row == 6 ? "Pawn" : String.Empty
+                    };
+
+                    square.Click += Move_Click;
+                    square.Click += Square_Click;
+
+
+                    Grid.SetRow(square, row);
+                    Grid.SetColumn(square, col);
+
+                    chessBoard.Children.Add(square);
+                }
+            }
+        }
+        Button? selectedBtn;
+        private void Square_Click(object sender, RoutedEventArgs e)
+        {
+            selectedBtn = sender as Button;
+            selectedBtn.Background = Brushes.LightGreen;
+
+
+        }
+
+        private void Move_Click(object sender, RoutedEventArgs e)
+        {
+            ChessSquare square;
+            if (selectedBtn != null)
+            {
+                moveToButton = sender as Button;
+                int selectedRow = Grid.GetRow(selectedBtn);
+                int selectedCol = Grid.GetColumn(selectedBtn);
+                int targetRow = Grid.GetRow(moveToButton);
+                int targetCol = Grid.GetColumn(moveToButton);
+
+                
+                if ((targetRow == selectedRow - 1 || targetRow == selectedRow - 2) && targetCol == selectedCol)
+                {
+                    
+                    Canvas.SetLeft(selectedBtn, Canvas.GetLeft(moveToButton));
+                    Canvas.SetTop(selectedBtn, Canvas.GetTop(moveToButton));
+                    moveToButton.Content = selectedBtn.Content;
+                    selectedBtn.Content = null;
+
+                    selectedBtn.Background = Brushes.Transparent;                  
+                    selectedBtn = null;
+                }
+                else
+                {
+                    MessageBox.Show("Неверный ход! Пешка может ходить только на одну или две клетки вперед.");
+                }
+            }
         }
     }
 }
+public class ChessSquare
+{
+    public int Row { get; }
+    public int Column { get; }
+
+    public ChessSquare(int row, int column)
+    {
+        Row = row;
+        Column = column;
+    }
+}
+
