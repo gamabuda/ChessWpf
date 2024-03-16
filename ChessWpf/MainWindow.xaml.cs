@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,126 +13,103 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ChessLib;
 
 namespace ChessWpf
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
-        private Dictionary<int, Pawn> pawns = new Dictionary<int, Pawn>();
-        private int selectedPawnRow = -1;
+        private readonly SolidColorBrush lightBrush = new SolidColorBrush(Colors.White);
+        private readonly SolidColorBrush darkBrush = new SolidColorBrush(Colors.Pink);
+        private const int boardSize = 8;
+        private Pawn[,] board = new Pawn[boardSize, boardSize];
 
         public MainWindow()
         {
             InitializeComponent();
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    Button button = new Button();
-                    button.Width = 95;
-                    button.Height = 95;
+            InitializeBoard();
+        }
 
-                    if ((i + j) % 2 == 0)
+        private void InitializeBoard()
+        {
+            for (int row = 0; row < boardSize; row++)
+            {
+                for (int col = 0; col < boardSize; col++)
+                {
+                    var square = new Button
                     {
-                        button.Background = Brushes.Pink;
-                    }
-                    else
+                        Background = (row + col) % 2 == 0 ? lightBrush : darkBrush,
+                        Tag = new Pawn(row, col),
+                        Content = String.Empty
+                    };
+
+                    if (row < 2 || row > 5)
                     {
-                        button.Background = Brushes.White;
+                        square.Content = "Pawn";
+                        board[row, col] = new Pawn(row, col);
                     }
 
-                    Grid.SetRow(button, i);
-                    Grid.SetColumn(button, j);
-                    boardGrid.Children.Add(button);
-                    button.Click += Button_Click;
+                    square.Click += Button_Click;
+
+                    Grid.SetRow(square, row);
+                    Grid.SetColumn(square, col);
+
+                    boardGrid.Children.Add(square);
                 }
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                Button button = new Button();
-                Pawn pawn = new Pawn(i, false);
-                button.Width = 95;
-                button.Height = 95;
-
-                if ((i + 1) % 2 == 0)
-                {
-                    button.Background = Brushes.Pink;
-                }
-                else
-                {
-                    button.Background = Brushes.White;
-                }
-
-                Grid.SetRow(button, 1);
-                Grid.SetColumn(button, i);
-                boardGrid.Children.Add(button);
-                button.Click += Button_Click;
-                pawns[i] = pawn;
-
-                Image image = new Image();
-                image.Source = new BitmapImage(new Uri("C:\\Users\\Asus\\Source\\Repos\\ChessWpf\\ChessWpf\\pawn.png"));
-                Grid.SetRow(image, 1);
-                Grid.SetColumn(image, i);
-                boardGrid.Children.Add(image);
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                Button button = new Button();
-                Pawn pawn = new Pawn(i, true);
-                button.Width = 95;
-                button.Height = 95;
-
-                if ((i + 1) % 2 == 0)
-                {
-                    button.Background = Brushes.Pink;
-                }
-                else
-                {
-                    button.Background = Brushes.White;
-                }
-
-                Grid.SetRow(button, 6);
-                Grid.SetColumn(button, i);
-                boardGrid.Children.Add(button);
-                button.Click += Button_Click;
-                pawns[i] = pawn;
-
-                Image image = new Image();
-                image.Source = new BitmapImage(new Uri("C:\\Users\\Asus\\Source\\Repos\\ChessWpf\\ChessWpf\\pawn.png"));
-                Grid.SetRow(image, 6);
-                Grid.SetColumn(image, i);
-                boardGrid.Children.Add(image);
             }
         }
 
+        Pawn selectedPawn;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Button clickedButton = (Button)sender;
-            int row = Grid.GetRow(clickedButton);
-            Pawn pawn = pawns[row];
-            int newPosition = Grid.GetColumn(clickedButton);
+            var button = (Button)sender;
+            var square = (Pawn)button.Tag;
 
-            if (selectedPawnRow == row)
+            if (board[square.x, square.y] != null)
             {
-                if (pawn.CanMove(newPosition))
+                selectedPawn = board[square.x, square.y];
+            }
+            else if (selectedPawn != null)
+            {
+                if (selectedPawn.CanMove(square.x, square.y) || selectedPawn.CanCapture(square.x, square.y))
                 {
-                    pawn.position = newPosition;
+                    UpdateBoard(selectedPawn, square);
+                    selectedPawn = null;
                     MessageBox.Show("Ход успешно выполнен!");
-                    selectedPawnRow = -1;
                 }
                 else
                 {
                     MessageBox.Show("Невозможно сделать ход!");
                 }
             }
-            else
+        }
+
+        private void UpdateBoard(Pawn pawn, Pawn targetSquare)
+        {
+            foreach (Button b in boardGrid.Children)
             {
-                selectedPawnRow = row;
+                var s = (Pawn)b.Tag;
+                if (s.x == pawn.x && s.y == pawn.y)
+                {
+                    b.Content = String.Empty;
+                }
+            }
+
+            board[pawn.x, pawn.y] = null;
+            pawn.y = targetSquare.y;
+            pawn.x = targetSquare.x;
+            board[targetSquare.x, targetSquare.y] = pawn;
+
+            foreach (Button b in boardGrid.Children)
+            {
+                var s = (Pawn)b.Tag;
+                if (s.x == targetSquare.x && s.y == targetSquare.y)
+                {
+                    b.Content = "Pawn";
+                }
             }
         }
     }
-
-}
+ }

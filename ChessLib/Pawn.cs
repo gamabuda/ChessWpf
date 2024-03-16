@@ -8,65 +8,49 @@ namespace ChessLib
 {
     public class Pawn
     {
-        public int position;
-        public bool isWhite;
+        public int x { get; set; }
+        public int y { get; set; }
 
-        public Pawn(int position, bool isWhite)
+        public Pawn(int x, int y)
         {
-            this.position = position;
-            this.isWhite = isWhite;
+            this.x = x;
+            this.y = y;
         }
 
-        public bool CanMove(int newPosition)
+        public bool CanMove(int x, int y)
         {
-            if (newPosition < 1 || newPosition > 8)
-                return false;
-
-            if (isWhite)
+            if (this.y == y)
             {
-                if (position == newPosition)
+                if (this.x == x)
+                {
                     return false;
-
-                if (position == 2 && newPosition == 4)
+                }
+                else if (Math.Abs(this.x - x) == 1)
+                {
                     return true;
-
-                if (position == 2 && newPosition == 3)
+                }
+                else if (this.x == 1 && Math.Abs(this.x - x) == 2)
+                {
                     return true;
-
-                if (position == 3 && newPosition == 4)
-                    return true;
-
-                if (position > 2 && newPosition == position + 1)
-                    return true;
-
-                if (position == 7 && newPosition == 8)
-                    return true;
-
-                return false;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                if (position == newPosition)
-                    return false;
-
-                if (position == 7 && newPosition == 5)
-                    return true;
-
-                if (position == 7 && newPosition == 6)
-                    return true;
-
-                if (position == 6 && newPosition == 5)
-                    return true;
-
-                if (position < 7 && newPosition == position - 1)
-                    return true;
-
-                if (position == 2 && newPosition == 1)
-                    return true;
-
                 return false;
-
             }
+        }
+        public bool CanCapture(int x, int y)
+        {
+            if (Math.Abs(this.x - x) == 1 && Math.Abs(this.y - y) == 1)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
