@@ -19,6 +19,8 @@ namespace ChessWpf
     public partial class MainWindow : Window
     {
         private Dictionary<int, Pawn> pawns = new Dictionary<int, Pawn>();
+        private int selectedPawnRow = -1;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,13 +29,12 @@ namespace ChessWpf
                 for (int j = 0; j < 8; j++)
                 {
                     Button button = new Button();
-                    Pawn pawn = new Pawn(i, true);
-                    button.Width = 85;
+                    button.Width = 95;
                     button.Height = 95;
 
                     if ((i + j) % 2 == 0)
                     {
-                        button.Background = Brushes.Black;
+                        button.Background = Brushes.Pink;
                     }
                     else
                     {
@@ -44,14 +45,6 @@ namespace ChessWpf
                     Grid.SetColumn(button, j);
                     boardGrid.Children.Add(button);
                     button.Click += Button_Click;
-                    pawns[i] = pawn;
-
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.Text = "pawn";
-                    textBlock.Foreground = Brushes.Black;
-                    Grid.SetRow(textBlock, i);
-                    Grid.SetColumn(textBlock, j);
-                    boardGrid.Children.Add(textBlock);
                 }
             }
 
@@ -59,12 +52,12 @@ namespace ChessWpf
             {
                 Button button = new Button();
                 Pawn pawn = new Pawn(i, false);
-                button.Width = 85;
+                button.Width = 95;
                 button.Height = 95;
 
                 if ((i + 1) % 2 == 0)
                 {
-                    button.Background = Brushes.Black;
+                    button.Background = Brushes.Pink;
                 }
                 else
                 {
@@ -77,24 +70,23 @@ namespace ChessWpf
                 button.Click += Button_Click;
                 pawns[i] = pawn;
 
-                TextBlock textBlock = new TextBlock();
-                textBlock.Text = "pawn";
-                textBlock.Foreground = Brushes.Black;
-                Grid.SetRow(textBlock, 1);
-                Grid.SetColumn(textBlock, i);
-                boardGrid.Children.Add(textBlock);
+                Image image = new Image();
+                image.Source = new BitmapImage(new Uri("C:\\Users\\Asus\\Source\\Repos\\ChessWpf\\ChessWpf\\pawn.png"));
+                Grid.SetRow(image, 1);
+                Grid.SetColumn(image, i);
+                boardGrid.Children.Add(image);
             }
 
             for (int i = 0; i < 8; i++)
             {
                 Button button = new Button();
                 Pawn pawn = new Pawn(i, true);
-                button.Width = 85;
+                button.Width = 95;
                 button.Height = 95;
 
                 if ((i + 1) % 2 == 0)
                 {
-                    button.Background = Brushes.Black;
+                    button.Background = Brushes.Pink;
                 }
                 else
                 {
@@ -107,12 +99,11 @@ namespace ChessWpf
                 button.Click += Button_Click;
                 pawns[i] = pawn;
 
-                TextBlock textBlock = new TextBlock();
-                textBlock.Text = "pawn";
-                textBlock.Foreground = Brushes.Black;
-                Grid.SetRow(textBlock, 6);
-                Grid.SetColumn(textBlock, i);
-                boardGrid.Children.Add(textBlock);
+                Image image = new Image();
+                image.Source = new BitmapImage(new Uri("C:\\Users\\Asus\\Source\\Repos\\ChessWpf\\ChessWpf\\pawn.png"));
+                Grid.SetRow(image, 6);
+                Grid.SetColumn(image, i);
+                boardGrid.Children.Add(image);
             }
         }
 
@@ -123,16 +114,24 @@ namespace ChessWpf
             Pawn pawn = pawns[row];
             int newPosition = Grid.GetColumn(clickedButton);
 
-            if (pawn.CanMove(newPosition))
+            if (selectedPawnRow == row)
             {
-                pawn.position = newPosition;
-                MessageBox.Show("Ход успешно выполнен!");
+                if (pawn.CanMove(newPosition))
+                {
+                    pawn.position = newPosition;
+                    MessageBox.Show("Ход успешно выполнен!");
+                    selectedPawnRow = -1;
+                }
+                else
+                {
+                    MessageBox.Show("Невозможно сделать ход!");
+                }
             }
             else
             {
-                MessageBox.Show("Невозможно сделать ход!");
+                selectedPawnRow = row;
             }
         }
-
     }
+
 }

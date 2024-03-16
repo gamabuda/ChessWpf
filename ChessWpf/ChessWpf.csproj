@@ -8,11 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChessLib\ChessLib.csproj" />
+    <Compile Remove="Icons\**" />
+    <EmbeddedResource Remove="Icons\**" />
+    <None Remove="Icons\**" />
+    <Page Remove="Icons\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Icons\" />
+    <ProjectReference Include="..\ChessLib\ChessLib.csproj" />
   </ItemGroup>
 
 </Project>
