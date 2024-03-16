@@ -10,7 +10,6 @@ namespace ChessLib
     {
         public int x { get; set; }
         public int y { get; set; }
-
         public Pawn(int x, int y)
         {
             this.x = x;
