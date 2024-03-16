@@ -47,10 +47,10 @@ namespace ChessLib
         {
             if (Math.Abs(this.x - x) == 1 && Math.Abs(this.y - y) == 1)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
     }
 }
