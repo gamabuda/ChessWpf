@@ -19,115 +19,106 @@ namespace ChessWpf
     public partial class MainWindow : Window
     {
 
-        private const int BoardSize = 8;
-        private const int TileSize = 50;
-
-        private List<Rectangle> squares = new List<Rectangle>();
-        private List<Image> pawns = new List<Image>();
-
-        private SolidColorBrush lightBrush = new SolidColorBrush(Colors.White);
-        private SolidColorBrush darkBrush = new SolidColorBrush(Colors.Gray);
-        private SolidColorBrush highlightBrush = new SolidColorBrush(Colors.LightGreen);
-
-        private int selectedPawnIndex = -1;
-        private int selectedCellIndex = -1;
+        private Image selectedPawn;
+        private Rectangle originalRectangle;
+        private bool isFirstMove = true;
 
         public MainWindow()
         {
             InitializeComponent();
-            DrawChessboard();
-            DrawPawns();
+            CreateChessboard();
+            AddPawn();
         }
 
-        private void DrawChessboard()
+        private void CreateChessboard()
         {
-            for (int i = 0; i < BoardSize; i++)
+            for (int i = 0; i < 8; i++)
             {
-                for (int j = 0; j < BoardSize; j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    Rectangle square = new Rectangle
-                    {
-                        Width = TileSize,
-                        Height = TileSize,
-                        Fill = (i + j) % 2 == 0 ? lightBrush : darkBrush
-                    };
+                    var square = new Rectangle();
+                    square.Width = 50;
+                    square.Height = 50;
+                    square.Fill = (i + j) % 2 == 0 ? Brushes.Beige : Brushes.SaddleBrown;
+                    square.MouseLeftButtonDown += Square_MouseLeftButtonDown;
 
-                    Canvas.SetLeft(square, j * TileSize);
-                    Canvas.SetTop(square, i * TileSize);
-
-                    chessboardCanvas.Children.Add(square);
-                    squares.Add(square);
-
-                    int index = i * BoardSize + j;
-                    square.MouseLeftButtonDown += (sender, e) => Square_Clicked(index);
+                    Grid.SetRow(square, i);
+                    Grid.SetColumn(square, j);
+                    chessGrid.Children.Add(square);
                 }
             }
         }
 
-        private void DrawPawns()
+        private void AddPawn()
         {
-            string pawnImagePath = "C:\\Users\\user\\source\\repos\\ChessWpf\\ChessWpf\\pngwing.com (6).png";
+            var pawnImage = new Image();
+            pawnImage.Source = new BitmapImage(new Uri("C:\\Users\\user\\source\\repos\\ChessWpf\\ChessWpf\\pngwing.com (6).png")); // Укажите свой путь к изображению
+            pawnImage.Width = 50;
+            pawnImage.Height = 50;
+            pawnImage.MouseLeftButtonDown += PawnImage_MouseLeftButtonDown;
 
-            for (int i = 0; i < BoardSize; i++)
+            Grid.SetRow(pawnImage, 1);
+            Grid.SetColumn(pawnImage, 6);
+            chessGrid.Children.Add(pawnImage);
+        }
+
+        private void PawnImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (selectedPawn != null)
             {
-                Image pawn = new Image
-                {
-                    Source = new BitmapImage(new Uri(pawnImagePath)),
-                    Width = TileSize,
-                    Height = TileSize,
-                    Stretch = Stretch.Fill
-                };
+                selectedPawn.Effect = null;
+                selectedPawn = null;
+            }
 
-                Canvas.SetLeft(pawn, i * TileSize);
-                Canvas.SetTop(pawn, (BoardSize - 2) * TileSize);
-
-                chessboardCanvas.Children.Add(pawn);
-                pawns.Add(pawn);
-
-                int index = i;
-                pawn.MouseLeftButtonDown += (sender, e) => Pawn_Clicked(index);
+            selectedPawn = (Image)sender;
+            originalRectangle = FindParent<Rectangle>(selectedPawn);
+            if (originalRectangle != null)
+            {
+                originalRectangle.Fill = Brushes.LightGreen;
             }
         }
 
-        private void Pawn_Clicked(int index)
+        private void Square_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (selectedPawnIndex == -1)
+            var square = (Rectangle)sender;
+            if (selectedPawn != null)
             {
-                selectedPawnIndex = index;
-                squares[index + (BoardSize - 2) * BoardSize].Fill = highlightBrush;
+                int selectedRow = Grid.GetRow(selectedPawn);
+                int selectedColumn = Grid.GetColumn(selectedPawn);
+                int targetRow = Grid.GetRow(square);
+                int targetColumn = Grid.GetColumn(square);
+
+                if ((targetRow == selectedRow + 1 && targetColumn == selectedColumn) ||
+                    (isFirstMove && targetRow == selectedRow + 2 && targetColumn == selectedColumn))
+                {
+                    Grid.SetRow(selectedPawn, targetRow);
+                    Grid.SetColumn(selectedPawn, targetColumn);
+
+                    isFirstMove = false;
+
+                    if (originalRectangle != null)
+                    {
+                        originalRectangle.Fill = (Grid.GetRow(originalRectangle) + Grid.GetColumn(originalRectangle)) % 2 == 0 ? Brushes.Beige : Brushes.Brown;
+                    }
+                }
+                selectedPawn = null;
+            }
+        }
+
+        private T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+            if (parentObject == null) return null;
+
+            if (parentObject is T parent)
+            {
+                return parent;
             }
             else
             {
-                squares[selectedPawnIndex + (BoardSize - 2) * BoardSize].Fill = (selectedPawnIndex % 2 == 0) ? lightBrush : darkBrush;
-
-                selectedCellIndex = index + (BoardSize - 2) * BoardSize;
-                MovePawn();
+                return FindParent<T>(parentObject);
             }
-        }
-
-        private void Square_Clicked(int index)
-        {
-            if (selectedPawnIndex != -1)
-            {
-                squares[selectedPawnIndex + (BoardSize - 2) * BoardSize].Fill = (selectedPawnIndex % 2 == 0) ? lightBrush : darkBrush;
-
-                selectedCellIndex = index;
-                MovePawn();
-            }
-        }
-
-        private void MovePawn()
-        {
-            int row = selectedCellIndex / BoardSize;
-            int col = selectedCellIndex % BoardSize;
-
-            Canvas.SetLeft(pawns[selectedPawnIndex], col * TileSize);
-            Canvas.SetTop(pawns[selectedPawnIndex], row * TileSize);
-
-            squares[selectedCellIndex].Fill = (row + col) % 2 == 0 ? lightBrush : darkBrush;
-
-            selectedPawnIndex = -1;
-            selectedCellIndex = -1;
         }
     }
 }
