@@ -41,7 +41,7 @@ namespace GameLogic
 
         private IEnumerable<Move> ForwardMoves(Poses from, GameField gameField)
         {
-            Poses oneMovePos = from + forward;
+            Poses oneMovePos = from + Directions.Up;
 
             if(CanMove(oneMovePos, gameField))
             {
