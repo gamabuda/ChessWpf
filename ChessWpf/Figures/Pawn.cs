@@ -3,56 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 
 namespace ChessWpf
 {
     public class Pawn : ChessFigure
     {
-        public bool pawnsFirstMove { get; set; }
-        public Pawn(Side side, int[] position) : base(side, position)
+        public int X { get; set; }
+        public int Y { get; set; }
+        public bool HasMoved { get; set; }
+
+        public Pawn(int x, int y)
         {
-            pawnsFirstMove = true;
+            this.X = x;
+            this.Y = y;
+            HasMoved = false;
         }
 
-        public override bool Move(int[] newPos)
+        public bool IsValidMove(int newX, int newY, bool HasMoved)
         {
-            int oldR = Position[0];
-            int newR = newPos[0];
-            int oldC = Position[1];
-            int newC = newPos[1];
-
-            if (SideColor == Side.White)
-            {
-                if (oldC == newC && oldR - newR == 1)
-                {
-                    pawnsFirstMove = true;
-                    return true;
-                }
-                if (oldC == newC && oldR - newR == 2 && pawnsFirstMove)
-                {
-                    pawnsFirstMove = false;
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                if (oldC == newC && oldR - newR == -1)
-                {
-                    pawnsFirstMove = true;
-                    return true;
-                }
-                if (oldC == newC && oldR - newR == -2 && pawnsFirstMove)
-                {
-                    pawnsFirstMove = true;
-                    return true;
-                }
-                return false;
-            }
+            if (!HasMoved)
+                return (Math.Abs(X - newX) <= 2 && Math.Abs(Y - newY) <= 2);
+            
+            else 
+                return (Math.Abs(X - newX) <= 1 && Math.Abs(Y- newY) <= 1);
         }
-        public override string ToString()
+
+        public void MovedMark()
         {
-            return "Pawn";
+            HasMoved = true;
         }
     }
 }
+
