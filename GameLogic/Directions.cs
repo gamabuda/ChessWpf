@@ -2,10 +2,10 @@
 {
     public class Directions
     {
-        public readonly static Directions Up = new Directions(-1, 0);
-        public readonly static Directions Down = new Directions(1, 0);
-        public readonly static Directions Right = new Directions(0, 1);
-        public readonly static Directions Left = new Directions(0, -1);
+        public readonly static Directions Up = new Directions(0, -1);
+        public readonly static Directions Down = new Directions(0, 1);
+        public readonly static Directions Right = new Directions(-1, 0);
+        public readonly static Directions Left = new Directions(1, 0);
         public readonly static Directions UpRight = Up + Right;
         public readonly static Directions DownRight = Down + Right;
         public readonly static Directions UpLeft = Up + Left;
