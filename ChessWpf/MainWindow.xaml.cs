@@ -24,6 +24,7 @@ namespace ChessWpf
         private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
         private const int boardSize = 8;
         private Button moveToButton;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,19 +53,29 @@ namespace ChessWpf
                     Grid.SetColumn(square, col);
 
                     chessBoard.Children.Add(square);
+
                 }
             }
         }
         Button? selectedBtn;
         private void Square_Click(object sender, RoutedEventArgs e)
         {
+            Button clickedBtn = sender as Button;
+
+           
+            if (selectedBtn != null && !IsMoveValid(selectedBtn, clickedBtn))
+            {
+                return;
+            }
+
+           
             if (selectedBtn != null)
             {
                 selectedBtn.Background = (Grid.GetRow(selectedBtn) + Grid.GetColumn(selectedBtn)) % 2 == 0 ? lightSquareBrush : darkSquareBrush;
             }
-            selectedBtn = sender as Button;
-            selectedBtn.Background = Brushes.LightGreen;
 
+            selectedBtn = clickedBtn;
+            
 
         }
 
@@ -79,14 +90,14 @@ namespace ChessWpf
                 int targetRow = Grid.GetRow(moveToButton);
                 int targetCol = Grid.GetColumn(moveToButton);
 
-                
+                Brush originalBackground = selectedBtn.Background;
                 if ((targetRow == selectedRow - 1 || targetRow == selectedRow - 2) && targetCol == selectedCol)
                 {
 
                     moveToButton.Content = selectedBtn.Content;
                     selectedBtn.Content = null;
 
-                    selectedBtn.Background = Brushes.Transparent;
+                    selectedBtn.Background = originalBackground;
                     selectedBtn = null;
                 }
                 else
@@ -94,6 +105,19 @@ namespace ChessWpf
                     MessageBox.Show("Неверный ход! Пешка может ходить только на одну или две клетки вперед.");
                 }
             }
+     
+        }
+        private bool IsMoveValid(Button startBtn, Button endBtn)
+        {
+            int selectedRow = Grid.GetRow(selectedBtn);
+            int selectedCol = Grid.GetColumn(selectedBtn);
+            int targetRow = Grid.GetRow(moveToButton);
+            int targetCol = Grid.GetColumn(moveToButton);
+            if ((targetRow == selectedRow - 1 || targetRow == selectedRow - 2) && targetCol == selectedCol)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
@@ -108,4 +132,9 @@ public class ChessSquare
         Column = column;
     }
 }
-
+public class Pawn
+{
+    public Button Button { get; set; }
+    public int Row { get; set; }
+    public int Col { get; set; }
+}
