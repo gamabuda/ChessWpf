@@ -24,7 +24,7 @@ namespace ChessWpf
         private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
         private const int boardSize = 8;
         private Button moveToButton;
-
+        Pawn[,] amount_of_pawns = new Pawn[boardSize, boardSize];
         public MainWindow()
         {
             InitializeComponent();
@@ -59,45 +59,30 @@ namespace ChessWpf
         }
         Button? selectedBtn;
         private void Square_Click(object sender, RoutedEventArgs e)
-        {
-            Button clickedBtn = sender as Button;
-
-           
-            if (selectedBtn != null && !IsMoveValid(selectedBtn, clickedBtn))
-            {
-                return;
-            }
-
-           
+        {          
             if (selectedBtn != null)
             {
-                selectedBtn.Background = (Grid.GetRow(selectedBtn) + Grid.GetColumn(selectedBtn)) % 2 == 0 ? lightSquareBrush : darkSquareBrush;
+                
             }
-
-            selectedBtn = clickedBtn;
-            
-
         }
-
+        Pawn selectedPawn;
         private void Move_Click(object sender, RoutedEventArgs e)
         {
-            ChessSquare square;
+            var button = (Button)sender;
+            var square = (ChessSquare)button.Tag;
             if (selectedBtn != null)
             {
                 moveToButton = sender as Button;
-                int selectedRow = Grid.GetRow(selectedBtn);
-                int selectedCol = Grid.GetColumn(selectedBtn);
-                int targetRow = Grid.GetRow(moveToButton);
-                int targetCol = Grid.GetColumn(moveToButton);
+                
 
-                Brush originalBackground = selectedBtn.Background;
-                if ((targetRow == selectedRow - 1 || targetRow == selectedRow - 2) && targetCol == selectedCol)
+                
+                if (selectedPawn.Move(square.Column, square.Row))
                 {
 
                     moveToButton.Content = selectedBtn.Content;
                     selectedBtn.Content = null;
 
-                    selectedBtn.Background = originalBackground;
+                    
                     selectedBtn = null;
                 }
                 else
@@ -107,18 +92,7 @@ namespace ChessWpf
             }
      
         }
-        private bool IsMoveValid(Button startBtn, Button endBtn)
-        {
-            int selectedRow = Grid.GetRow(selectedBtn);
-            int selectedCol = Grid.GetColumn(selectedBtn);
-            int targetRow = Grid.GetRow(moveToButton);
-            int targetCol = Grid.GetColumn(moveToButton);
-            if ((targetRow == selectedRow - 1 || targetRow == selectedRow - 2) && targetCol == selectedCol)
-            {
-                return true;
-            }
-            return false;
-        }
+      
     }
 }
 public class ChessSquare
@@ -134,7 +108,15 @@ public class ChessSquare
 }
 public class Pawn
 {
-    public Button Button { get; set; }
-    public int Row { get; set; }
-    public int Col { get; set; }
+    public int x;
+    public int y;
+    public Pawn(int newX, int newY)
+    {
+        this.x = newX;
+        this.y = newY;
+    }
+    public  bool Move(int newX, int newY)
+    {
+        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) == 1);
+    }
 }
