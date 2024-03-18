@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -40,12 +37,11 @@ namespace ChessWpf
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
                         Tag = new ChessSquare(row, col),
-                        Content = row == 7 ? "Pawn" : String.Empty
+                        Content = GetInitialPiece(row, col)
                     };
 
                     square.Click += Move_Click;
                     square.Click += Square_Click;
-
 
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
@@ -53,6 +49,41 @@ namespace ChessWpf
                     chessBoard.Children.Add(square);
                 }
             }
+        }
+
+        private string GetInitialPiece(int row, int col)
+        {
+            if (row == 6)
+                return "♟";
+            else if (row == 1)
+                return "♙";
+            else if (row == 0)
+            {
+                if (col == 0 || col == 7)
+                    return "♖";
+                else if (col == 1 || col == 6)
+                    return "♘";
+                else if (col == 2 || col == 5)
+                    return "♗";
+                else if (col == 3)
+                    return "♕";
+                else if (col == 4)
+                    return "♔";
+            }
+            else if (row == 7)
+            {
+                if (col == 0 || col == 7)
+                    return "♜";
+                else if (col == 1 || col == 6)
+                    return "♞";
+                else if (col == 2 || col == 5)
+                    return "♝";
+                else if (col == 3)
+                    return "♛";
+                else if (col == 4)
+                    return "♚";
+            }
+            return String.Empty;
         }
         Button? selectedBtn;
         private void Square_Click(object sender, RoutedEventArgs e)
@@ -72,10 +103,30 @@ namespace ChessWpf
             var square = (ChessSquare)button.Tag;
 
             if (selectedBtn == null)
+            {
+                if (string.IsNullOrEmpty(button.Content as string))
+                    return;
+                if (button.Content.ToString() != "♙" && button.Content.ToString() != "♟")
+                    return;
+
+                selectedBtn = button;
+                return;
+            }
+
+            if (button == selectedBtn)
                 return;
 
-            button.Content = selectedBtn.Content;
-            selectedBtn.Content = String.Empty;
+            var selectedSquare = (ChessSquare)selectedBtn.Tag;
+
+            if ((selectedBtn.Content.ToString() == "♙" && square.Column == selectedSquare.Column &&
+                (square.Row == selectedSquare.Row + 1 || (selectedSquare.Row == 1 && square.Row == selectedSquare.Row + 2))) ||
+                (selectedBtn.Content.ToString() == "♟" && square.Column == selectedSquare.Column &&
+                (square.Row == selectedSquare.Row - 1 || (selectedSquare.Row == 6 && square.Row == selectedSquare.Row - 2))))
+            {
+                button.Content = selectedBtn.Content;
+                selectedBtn.Content = String.Empty;
+            }
+
             selectedBtn = null;
         }
     }
@@ -91,34 +142,3 @@ public class ChessSquare
         Column = column;
     }
 }
-public class Pawn
-{
-    public int Row { get; set; }
-    public int Column { get; set; }
-    public char Symbol { get; }
-
-    public Pawn(int row, int column)
-    {
-        Row = row;
-        Column = column;
-        Symbol = '♙'; 
-    }
-
-    public bool IsValidMove(int destRow, int destColumn)
-    {
-        if (destRow < 0 || destRow >= 8 || destColumn < 0 || destColumn >= 8)
-        {
-            return false; 
-        }
-
-        if (destColumn == Column && destRow == Row + 1)
-        {
-            return true; 
-        }
-
-        return false; 
-    }
-}
-
-
-
