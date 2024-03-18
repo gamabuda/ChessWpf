@@ -58,6 +58,10 @@ namespace ChessWpf
         Button? selectedBtn;
         private void Square_Click(object sender, RoutedEventArgs e)
         {
+            if (selectedBtn != null)
+            {
+                selectedBtn.Background = (Grid.GetRow(selectedBtn) + Grid.GetColumn(selectedBtn)) % 2 == 0 ? lightSquareBrush : darkSquareBrush;
+            }
             selectedBtn = sender as Button;
             selectedBtn.Background = Brushes.LightGreen;
 
@@ -78,13 +82,11 @@ namespace ChessWpf
                 
                 if ((targetRow == selectedRow - 1 || targetRow == selectedRow - 2) && targetCol == selectedCol)
                 {
-                    
-                    Canvas.SetLeft(selectedBtn, Canvas.GetLeft(moveToButton));
-                    Canvas.SetTop(selectedBtn, Canvas.GetTop(moveToButton));
+
                     moveToButton.Content = selectedBtn.Content;
                     selectedBtn.Content = null;
 
-                    selectedBtn.Background = Brushes.Transparent;                  
+                    selectedBtn.Background = Brushes.Transparent;
                     selectedBtn = null;
                 }
                 else
