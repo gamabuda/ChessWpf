@@ -24,11 +24,11 @@ namespace ChessWpf
         private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
         private const int boardSize = 8;
         private Button moveToButton;
-        Pawn[,] amount_of_pawns = new Pawn[boardSize, boardSize];
+        Pawn[,] board = new Pawn[boardSize, boardSize];
         public MainWindow()
         {
             InitializeComponent();
-
+            board[7, 1] = new Pawn(6, 1);
             InitializeBoard();
         }
 
@@ -42,7 +42,7 @@ namespace ChessWpf
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
                         Tag = new ChessSquare(row, col),
-                        Content = row == 6 ? "Pawn" : String.Empty
+                        Content = (board[row, col] != null)? "Pawn" : String.Empty
                     };
 
                     square.Click += Move_Click;
@@ -57,12 +57,14 @@ namespace ChessWpf
                 }
             }
         }
-        Button? selectedBtn;
+        Pawn selectedpawn;
         private void Square_Click(object sender, RoutedEventArgs e)
-        {          
-            if (selectedBtn != null)
+        {
+            var button = (Button)sender;
+            var square = (ChessSquare)button.Tag;
+            if (board[square.Row, square.Column] != null)
             {
-                
+                selectedpawn = board[square.Row, square.Column];
             }
         }
         Pawn selectedPawn;
@@ -70,20 +72,20 @@ namespace ChessWpf
         {
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
-            if (selectedBtn != null)
-            {
-                moveToButton = sender as Button;
-                
-
-                
+            if (selectedpawn != null)
+            {            
                 if (selectedPawn.Move(square.Column, square.Row))
                 {
-
-                    moveToButton.Content = selectedBtn.Content;
-                    selectedBtn.Content = null;
-
-                    
-                    selectedBtn = null;
+                    board[selectedpawn.x, selectedpawn.y] = null;
+                    selectedpawn.y = square.Row;
+                    selectedpawn.x = square.Column;
+                    board[square.Column, square.Row] = selectedpawn;
+                    var btn = (Button)sender;
+                    var s = (ChessSquare)btn.Tag;
+                    if (s.Column == square.Column&& s.Row == square.Row)
+                    {
+                        btn.Content = "Pawn";
+                    }
                 }
                 else
                 {
