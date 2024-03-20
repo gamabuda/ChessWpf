@@ -45,9 +45,9 @@ namespace ChessWpf
                         Content = (board[row, col] != null)? "Pawn" : String.Empty
                     };
 
-                    square.Click += Move_Click;
+                    
                     square.Click += Square_Click;
-
+                    square.Click += Move_Click;
 
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
@@ -65,38 +65,48 @@ namespace ChessWpf
             if (board[square.Row, square.Column] != null)
             {
                 selectedpawn = board[square.Row, square.Column];
+                return;
             }
         }
-        Pawn selectedPawn;
+        
         private void Move_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
-            if (selectedpawn != null)
-            {            
-                if (selectedPawn.Move(square.Column, square.Row))
+            
+
+            if(selectedpawn != null)
+            {
+                if (selectedpawn.Move(square.Column, square.Row))
                 {
+                    foreach (Button b in chessBoard.Children)
+                    {
+                        var s = (ChessSquare)b.Tag;
+                        if (s.Column == selectedpawn.x && s.Row == selectedpawn.y)
+                        {
+                            b.Content = "";
+                        }
+                    }
+
                     board[selectedpawn.x, selectedpawn.y] = null;
                     selectedpawn.y = square.Row;
                     selectedpawn.x = square.Column;
                     board[square.Column, square.Row] = selectedpawn;
-                    var btn = (Button)sender;
-                    var s = (ChessSquare)btn.Tag;
-                    if (s.Column == square.Column&& s.Row == square.Row)
+
+                    selectedpawn = null;
+                    foreach (Button b in chessBoard.Children)
                     {
-                        btn.Content = "Pawn";
+                        var s = (ChessSquare)b.Tag;
+                        if (s.Column == square.Column && s.Row == square.Row)
+                        {
+                            b.Content = "Pawn";
+                        }
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Неверный ход! Пешка может ходить только на одну или две клетки вперед.");
-                }
+                }    
             }
-     
-        }
       
+        }
     }
-}
 public class ChessSquare
 {
     public int Row { get; }
@@ -119,6 +129,6 @@ public class Pawn
     }
     public  bool Move(int newX, int newY)
     {
-        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) == 1);
+        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) <= 1);
     }
 }
