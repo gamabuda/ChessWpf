@@ -23,12 +23,11 @@ namespace ChessWpf
         private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
         private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
         private const int boardSize = 8;
-        private Button moveToButton;
         Pawn[,] board = new Pawn[boardSize, boardSize];
         public MainWindow()
         {
             InitializeComponent();
-            board[7, 1] = new Pawn(6, 1);
+            board[0, 0] = new Pawn(0, 0);
             InitializeBoard();
         }
 
@@ -42,12 +41,16 @@ namespace ChessWpf
                     {
                         Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
                         Tag = new ChessSquare(row, col),
-                        Content = (board[row, col] != null)? "Pawn" : String.Empty
+                        Content = (board[row, col] != null) ? "Pawn" : String.Empty
                     };
 
-                    
+                    if (board[row, col] != null)
+                    {
+                        square.Content = "Pawn";
+                    }
                     square.Click += Square_Click;
                     square.Click += Move_Click;
+                    
 
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
@@ -68,14 +71,18 @@ namespace ChessWpf
                 return;
             }
         }
-        
+
         private void Move_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
-            
-
-            if(selectedpawn != null)
+             if (board[square.Row, square.Column] != null)
+             {
+                selectedpawn = board[square.Row, square.Column];
+                return;
+             }
+           
+            if (selectedpawn != null)
             {
                 if (selectedpawn.Move(square.Column, square.Row))
                 {
@@ -102,11 +109,12 @@ namespace ChessWpf
                             b.Content = "Pawn";
                         }
                     }
-                }    
+                }
             }
-      
+
         }
     }
+}
 public class ChessSquare
 {
     public int Row { get; }
@@ -122,13 +130,13 @@ public class Pawn
 {
     public int x;
     public int y;
-    public Pawn(int newX, int newY)
+    public Pawn(int x, int y)
     {
-        this.x = newX;
-        this.y = newY;
+        this.x = x;
+        this.y = y;
     }
     public  bool Move(int newX, int newY)
     {
-        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) <= 1);
+        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) <= 1|| Math.Abs(x - newX) <= 2 && Math.Abs(y - newY) <= 2);
     }
 }
