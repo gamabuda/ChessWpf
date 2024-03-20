@@ -1,4 +1,5 @@
-﻿using ChessLib;
+﻿
+using ChessLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,14 +42,19 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightBrush : darkBrush,
-                        Tag = new Pawn(row, col),
-                        Content = String.Empty
+                        Tag = new Pawn(row, col, Colorsquare.White),
+                        Content = string.Empty
                     };
 
-                    if (row < 2 || row > 5)
+                    if (row < 1)
                     {
                         square.Content = "Pawn";
-                        board[row, col] = new Pawn(row, col);
+                        board[row, col] = new Pawn(row, col, Colorsquare.Black);
+                    }
+                    if (row > 6)
+                    {
+                        square.Content = "Pawn";
+                        board[row, col] = new Pawn(row, col, Colorsquare.White);
                     }
 
                     square.Click += Button_Click;
@@ -67,13 +73,13 @@ namespace ChessWpf
             var button = (Button)sender;
             var square = (Pawn)button.Tag;
 
-            if (board[square.x, square.y] != null)
+            if (board[square.X, square.Y] != null)
             {
-                selectedPawn = board[square.x, square.y];
+                selectedPawn = board[square.X, square.Y];
             }
             else if (selectedPawn != null)
             {
-                if (selectedPawn.CanMove(square.x, square.y) || selectedPawn.CanCapture(square.x, square.y))
+                if (selectedPawn.CanMove(square.X, square.Y) || selectedPawn.CanCapture(square.X, square.Y))
                 {
                     UpdateBoard(selectedPawn, square);
                     selectedPawn = null;
@@ -86,30 +92,30 @@ namespace ChessWpf
             }
         }
 
-        private void UpdateBoard(Pawn pawn, Pawn targetSquare)
+        private void UpdateBoard(Pawn pawn, Pawn square)
         {
             foreach (Button b in boardGrid.Children)
             {
                 var s = (Pawn)b.Tag;
-                if (s.x == pawn.x && s.y == pawn.y)
+                if (s.X == pawn.X && s.Y == pawn.Y)
                 {
-                    b.Content = String.Empty;
+                    b.Content = "";
                 }
             }
 
-            board[pawn.x, pawn.y] = null;
-            pawn.y = targetSquare.y;
-            pawn.x = targetSquare.x;
-            board[targetSquare.x, targetSquare.y] = pawn;
+            board[pawn.X, pawn.Y] = null;
+            pawn.Y = square.Y;
+            pawn.X = square.X;
+            board[square.X, square.Y] = pawn;
 
             foreach (Button b in boardGrid.Children)
             {
                 var s = (Pawn)b.Tag;
-                if (s.x == targetSquare.x && s.y == targetSquare.y)
+                if (s.X == square.X && s.Y == square.Y)
                 {
                     b.Content = "Pawn";
                 }
             }
         }
     }
- }
+}

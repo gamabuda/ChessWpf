@@ -1,55 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChessLib
+﻿namespace ChessLib
 {
     public class Pawn
     {
-        public int x { get; set; }
-        public int y { get; set; }
-        public Pawn(int x, int y)
+        public int X { get; set; }
+        public int Y { get; set; }
+        public bool HasMoved { get; set; }
+        public Colorsquare Color { get; set; }
+
+        public Pawn(int x, int y, Colorsquare color)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
+            HasMoved = false;
+            Color = color;
         }
 
-        public bool CanMove(int x, int y)
+        public bool CanMove(int newX, int newY)
         {
-            if (this.y == y)
-            {
-                if (this.x == x)
-                {
-                    return false;
-                }
-                else if (Math.Abs(this.x - x) == 1)
-                {
-                    return true;
-                }
-                else if (this.x == 1 && Math.Abs(this.x - x) == 2)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public bool CanCapture(int x, int y)
-        {
-            if (Math.Abs(this.x - x) == 1 && Math.Abs(this.y - y) == 1)
+            if (newX <= X)
             {
                 return false;
             }
 
-            return true;
+            if (Color == Colorsquare.White && newX > X)
+            {
+                if (newY == Y && newX - X <= 1 && !HasMoved)
+                {
+                    return true;
+                }
+
+                if (newY == Y  && newX - X <= 2 && !HasMoved)
+                {
+                    return true;
+                }
+            }
+
+            if (Color == Colorsquare.Black && newX > X)
+            {
+                if (newY == Y && newX - X <= 1 && !HasMoved)
+                {
+                    return true;
+                }
+
+                if (newY == Y && newX - X <= 2 && !HasMoved)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
+
+        public bool CanCapture(int newX, int newY)
+        {
+            if (Math.Abs(X - newX) == 1 && Math.Abs(Y - newY) == 1)
+            {
+                return false;
+            }
+
+            return false;
+        }
+    }
+
+    public enum Colorsquare
+    {
+        White,
+        Black
     }
 }
