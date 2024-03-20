@@ -41,19 +41,19 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightBrush : darkBrush,
-                        Tag = new Pawn(row, col),
+                        Tag = new Pawn(row, col, false),
                         Content = string.Empty
                     };
 
                     if (row < 1)
                     {
                         square.Content = "Pawn";
-                        board[row, col] = new Pawn(row, col);
+                        board[row, col] = new Pawn(row, col, false);
                     }
                     else if (row > 6)
                     {
                         square.Content = "Pawn";
-                        board[row, col] = new Pawn(row, col);
+                        board[row, col] = new Pawn(row, col, true);
                     }
 
                     square.Click += Button_Click;
