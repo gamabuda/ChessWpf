@@ -1,5 +1,4 @@
-﻿
-using ChessLib;
+﻿using ChessLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +22,7 @@ namespace ChessWpf
     public partial class MainWindow : Window
     {
         private readonly SolidColorBrush lightBrush = new SolidColorBrush(Colors.White);
-        private readonly SolidColorBrush darkBrush = new SolidColorBrush(Colors.Pink);
+        private readonly SolidColorBrush darkBrush = new SolidColorBrush(Colors.CadetBlue);
         private const int boardSize = 8;
         private Pawn[,] board = new Pawn[boardSize, boardSize];
 
@@ -42,19 +41,19 @@ namespace ChessWpf
                     var square = new Button
                     {
                         Background = (row + col) % 2 == 0 ? lightBrush : darkBrush,
-                        Tag = new Pawn(row, col, Colorsquare.White),
+                        Tag = new Pawn(row, col),
                         Content = string.Empty
                     };
 
                     if (row < 1)
                     {
                         square.Content = "Pawn";
-                        board[row, col] = new Pawn(row, col, Colorsquare.Black);
+                        board[row, col] = new Pawn(row, col);
                     }
-                    if (row > 6)
+                    else if (row > 6)
                     {
                         square.Content = "Pawn";
-                        board[row, col] = new Pawn(row, col, Colorsquare.White);
+                        board[row, col] = new Pawn(row, col);
                     }
 
                     square.Click += Button_Click;
@@ -79,7 +78,7 @@ namespace ChessWpf
             }
             else if (selectedPawn != null)
             {
-                if (selectedPawn.CanMove(square.X, square.Y) || selectedPawn.CanCapture(square.X, square.Y))
+                if (selectedPawn.IsValidMove(square.X, square.Y))
                 {
                     UpdateBoard(selectedPawn, square);
                     selectedPawn = null;
