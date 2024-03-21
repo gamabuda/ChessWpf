@@ -27,7 +27,15 @@ namespace ChessWpf
         public MainWindow()
         {
             InitializeComponent();
-            board[0, 0] = new Pawn(0, 0);
+            board[1, 0] = new Pawn(1, 0);
+            board[1, 1] = new Pawn(1, 1);
+            board[1, 2] = new Pawn(1, 2);
+            board[1, 3] = new Pawn(1, 3);
+            board[1, 4] = new Pawn(1, 4);
+            board[1, 5] = new Pawn(1, 5);
+            board[1, 6] = new Pawn(1, 6);
+            board[1, 7] = new Pawn(1, 7);
+
             InitializeBoard();
         }
 
@@ -48,9 +56,9 @@ namespace ChessWpf
                     {
                         square.Content = "Pawn";
                     }
-                    square.Click += Square_Click;
+
                     square.Click += Move_Click;
-                    
+
 
                     Grid.SetRow(square, row);
                     Grid.SetColumn(square, col);
@@ -61,55 +69,28 @@ namespace ChessWpf
             }
         }
         Pawn selectedpawn;
-        private void Square_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
-            if (board[square.Row, square.Column] != null)
-            {
-                selectedpawn = board[square.Row, square.Column];
-                return;
-            }
-        }
 
         private void Move_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
-             if (board[square.Row, square.Column] != null)
-             {
-                selectedpawn = board[square.Row, square.Column];
+
+            if (board[square.Column, square.Row] != null)
+            {
+                selectedpawn = board[square.Column, square.Row];
                 return;
-             }
-           
+            }
+
             if (selectedpawn != null)
             {
-                if (selectedpawn.Move(square.Column, square.Row))
+                if (selectedpawn.Try2Move(square.Column, square.Row))
                 {
-                    foreach (Button b in chessBoard.Children)
-                    {
-                        var s = (ChessSquare)b.Tag;
-                        if (s.Column == selectedpawn.x && s.Row == selectedpawn.y)
-                        {
-                            b.Content = "";
-                        }
-                    }
-
-                    board[selectedpawn.x, selectedpawn.y] = null;
-                    selectedpawn.y = square.Row;
-                    selectedpawn.x = square.Column;
-                    board[square.Column, square.Row] = selectedpawn;
-
-                    selectedpawn = null;
-                    foreach (Button b in chessBoard.Children)
-                    {
-                        var s = (ChessSquare)b.Tag;
-                        if (s.Column == square.Column && s.Row == square.Row)
-                        {
-                            b.Content = "Pawn";
-                        }
-                    }
+                    var b= (Button)sender;
+                    var s = (ChessSquare)button.Tag;
+                    
+                    
                 }
+                    
             }
 
         }
@@ -135,8 +116,8 @@ public class Pawn
         this.x = x;
         this.y = y;
     }
-    public  bool Move(int newX, int newY)
+    public bool Try2Move(int newX, int newY)
     {
-        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) <= 1|| Math.Abs(x - newX) <= 2 && Math.Abs(y - newY) <= 2);
+        return (Math.Abs(x - newX) <= 1 && Math.Abs(y - newY) <= 1);
     }
 }
