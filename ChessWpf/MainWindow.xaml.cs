@@ -90,17 +90,23 @@ namespace ChessWpf
                         if (s.Column == square.Column && s.Row == square.Row)
                         {
                             button.Content = String.Empty;
+                            break;
                         }
                     }
-                    selectedpawn = null;
-                    foreach(Button b in chessBoard.Children)
+
+                    selectedpawn.x = square.Column;
+                    selectedpawn.y = square.Row;
+
+                    foreach (Button b in chessBoard.Children)
                     {
                         var s = b.Tag as ChessSquare;
                         if (square.Column == s.Column && square.Row == s.Row)
                         {
                             b.Content = "Pawn";
+                            break;
                         }
                     }
+                    selectedpawn = null;
                 }
                     
             }
