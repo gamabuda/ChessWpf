@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace ChessWpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window
     {
         private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
@@ -75,7 +73,7 @@ namespace ChessWpf
             var button = (Button)sender;
             var square = (ChessSquare)button.Tag;
 
-            if (board[square.Column, square.Row] != null)
+            if (board[square.Row, square.Column] != null)
             {
                 selectedpawn = board[square.Column, square.Row];
                 return;
@@ -85,10 +83,24 @@ namespace ChessWpf
             {
                 if (selectedpawn.Try2Move(square.Column, square.Row))
                 {
-                    var b= (Button)sender;
-                    var s = (ChessSquare)button.Tag;
                     
-                    
+                    foreach(Button b in chessBoard.Children)
+                    {
+                        var s = b.Tag as ChessSquare;
+                        if (s.Column == square.Column && s.Row == square.Row)
+                        {
+                            button.Content = String.Empty;
+                        }
+                    }
+                    selectedpawn = null;
+                    foreach(Button b in chessBoard.Children)
+                    {
+                        var s = b.Tag as ChessSquare;
+                        if (square.Column == s.Column && square.Row == s.Row)
+                        {
+                            b.Content = "Pawn";
+                        }
+                    }
                 }
                     
             }
