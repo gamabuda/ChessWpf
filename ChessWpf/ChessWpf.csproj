@@ -3,16 +3,12 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="pngwing.com %286%29.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="pngwing.com (6).png" />
+    <ProjectReference Include="..\ChessLibrary\ChessLibrary.csproj" />
   </ItemGroup>
 
 </Project>
