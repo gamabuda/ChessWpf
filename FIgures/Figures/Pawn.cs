@@ -23,10 +23,13 @@ namespace ChessWpf
         public bool IsValidMove(int newX, int newY, bool HasMoved)
         {
             if (!HasMoved)
-                return (Math.Abs(X - newX) <= 2 && Math.Abs(Y - newY) <= 2);
-            
-            else 
-                return (Math.Abs(X - newX) <= 1 && Math.Abs(Y- newY) <= 1);
+            {
+                return (Math.Abs(X - newX) < 1 && Math.Abs(Y - newY) <= 2);
+            }
+            else
+            {
+                return (Math.Abs(X - newX) < 1 && Math.Abs(Y - newY) <= 1);
+            }
         }
 
         public void MovedMark()

@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static ChessWpf.MainWindow;
 
 namespace ChessWpf
 {
@@ -61,8 +60,13 @@ namespace ChessWpf
         Pawn selectedPawn;
         private void PlaceClick(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
-            var square = (ChessSquare)button.Tag;
+            var button = sender as Button;
+            var square = button?.Tag as ChessSquare;
+
+            if (square == null)
+            {
+                return;
+            }
 
             if (placements[square.Column, square.Row] != null)
             {
@@ -70,40 +74,40 @@ namespace ChessWpf
                 return;
             }
 
-            if (selectedPawn != null)
+            if (selectedPawn != null && selectedPawn.IsValidMove(square.Column, square.Row, selectedPawn.HasMoved))
             {
-                if (selectedPawn.IsValidMove(square.Column, square.Row, selectedPawn.HasMoved))
-                {
-                    foreach (Button b in Field.Children)
-                    {
-                        var s = (ChessSquare)b.Tag;
-                        if (s.Column == selectedPawn.X && s.Row == selectedPawn.Y)
-                        {
-                            b.Content = "";
-                        }
-                    }
-
-                    placements[selectedPawn.X, selectedPawn.Y] = null;
-                    selectedPawn.Y = square.Row;
-                    selectedPawn.X = square.Column;
-                    placements[square.Column, square.Row] = selectedPawn;
-
-                    selectedPawn.MovedMark();
-
-                    selectedPawn = null;
-
-                    foreach (Button b in Field.Children)
-                    {
-                        var s = (ChessSquare)b.Tag;
-                        if (s.Column == square.Column && s.Row == square.Row)
-                        {
-                            b.Content = "Pawn";
-                        }
-                    }
-                }
+                MovePawn(square);
             }
         }
 
+        private void MovePawn(ChessSquare square)
+        {
+            foreach (Button chesspiece in Field.Children)
+            {
+                var moveSquare = chesspiece.Tag as ChessSquare;
+                if (moveSquare != null && moveSquare.Column == selectedPawn.X && moveSquare.Row == selectedPawn.Y)
+                {
+                    chesspiece.Content = "";
+                }
+            }
+
+            placements[selectedPawn.X, selectedPawn.Y] = null;
+            selectedPawn.Y = square.Row;
+            selectedPawn.X = square.Column;
+            placements[square.Column, square.Row] = selectedPawn;
+
+            selectedPawn.MovedMark();
+            selectedPawn = null;
+
+            foreach (Button chesspiece in Field.Children)
+            {
+                var moveSquare = chesspiece.Tag as ChessSquare;
+                if (moveSquare != null && moveSquare.Column == square.Column && moveSquare.Row == square.Row)
+                {
+                    chesspiece.Content = "Pawn";
+                }
+            }
+        }
 
         public class ChessSquare
         {
