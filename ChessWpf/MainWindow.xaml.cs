@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessWpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,18 +21,92 @@ namespace ChessWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly SolidColorBrush lightSquareBrush = new SolidColorBrush(Colors.Beige);
+        private readonly SolidColorBrush darkSquareBrush = new SolidColorBrush(Colors.SaddleBrown);
+        private const int boardSize = 8;
+        List<Button> buttons = new List<Button>();
+
+        Button ActiveSquare;
         public MainWindow()
         {
             InitializeComponent();
 
-            Button button = new Button();
-            Grid grid = new Grid();
+            InitializeBoard();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void InitializeBoard()
         {
-            var btn = sender as Button;
-            btn.Content = "Pawn";
+            Pawn pawn = new Pawn(ChessPiece.Color.White, new int[] { 6, 0 });
+            for (int row = 0; row < boardSize; row++)
+            {
+                for (int col = 0; col < boardSize; col++)
+                {
+                    var square = new Button
+                    {
+                        Background = (row + col) % 2 == 0 ? lightSquareBrush : darkSquareBrush,
+                        Tag = new ChessSquare(row, col)
+                    };
+
+                    square.Click += Square_Click;
+
+                    Grid.SetRow(square, row);
+                    Grid.SetColumn(square, col);
+
+                    ChessPiece piece = null;
+                    if (row == 1 || row == 6)
+                    {
+                        piece = new Pawn(row == 1 ? ChessPiece.Color.Black : ChessPiece.Color.White, new int[] { row, col });
+                    }
+                    if (piece != null)
+                    {
+                        var chessSquare = square.Tag as ChessSquare;
+                        chessSquare.ChessPiece = piece;
+                        square.Content = piece;
+                    }
+
+                    chessBoard.Children.Add(square);
+                    buttons.Add(square);
+                }
+            }
+        }
+        private void Square_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var square = (ChessSquare)button.Tag;
+
+            var activeSquare = ActiveSquare?.Tag as ChessSquare;
+
+            var movesqr = new int[] { square.Row, square.Column };
+
+            if (ActiveSquare is null)
+            {
+                ActiveSquare = button;
+                return;
+            }
+
+            if (activeSquare.ChessPiece.Move(movesqr))
+            {
+                activeSquare.ChessPiece.Position = movesqr;
+                square.ChessPiece = activeSquare.ChessPiece;
+                button.Content = square.ChessPiece;
+
+                activeSquare.ChessPiece = null;
+                ActiveSquare.Content = null;
+
+                ActiveSquare = null;
+            }
         }
     }
 }
+public class ChessSquare
+{
+    public int Row { get; }
+    public int Column { get; }
+    public ChessPiece ChessPiece { get; set; }
+    public ChessSquare(int row, int column)
+    {
+        Row = row;
+        Column = column;
+    }
+}
+
