@@ -12,5 +12,12 @@ namespace ChessLibrary
         public abstract Position From { get; }
         public abstract Position To { get; }
         public abstract void Execute(Board board);
+        public virtual bool isLegal(Board board)
+        {
+            Player player = board[From].Color;
+            Board boardcopy = board.Copy();
+            Execute(boardcopy);
+            return !boardcopy.IsInCheck(player);
+        }
     }
 }
