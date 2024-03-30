@@ -26,15 +26,8 @@ namespace ChessWpf
         {
             InitializeComponent();
             board[1, 0] = new Pawn(1, 0);
-            board[1, 1] = new Pawn(1, 1);
-            board[1, 2] = new Pawn(1, 2);
-            board[1, 3] = new Pawn(1, 3);
-            board[1, 4] = new Pawn(1, 4);
-            board[1, 5] = new Pawn(1, 5);
-            board[1, 6] = new Pawn(1, 6);
-            board[1, 7] = new Pawn(1, 7);
-
-            InitializeBoard();
+            
+                     InitializeBoard();
         }
 
         private void InitializeBoard()
@@ -75,38 +68,42 @@ namespace ChessWpf
 
             if (board[square.Row, square.Column] != null)
             {
-                selectedpawn = board[square.Column, square.Row];
+                selectedpawn = board[square.Row, square.Column];
                 return;
             }
 
             if (selectedpawn != null)
             {
-                if (selectedpawn.Try2Move(square.Column, square.Row))
+                if (selectedpawn.Try2Move(square.Row, square.Column))
                 {
                     
                     foreach(Button b in chessBoard.Children)
                     {
                         var s = b.Tag as ChessSquare;
-                        if (s.Column == square.Column && s.Row == square.Row)
+                        int tempRow = s.Row; 
+                        int tempColumn = s.Column;
+                        if (tempRow == square.Row && tempColumn == square.Column)
                         {
                             button.Content = String.Empty;
                             break;
                         }
                     }
-
+                    board[selectedpawn.x, selectedpawn.y] = null;
                     selectedpawn.x = square.Column;
                     selectedpawn.y = square.Row;
-
+                    selectedpawn = null;
                     foreach (Button b in chessBoard.Children)
                     {
                         var s = b.Tag as ChessSquare;
-                        if (square.Column == s.Column && square.Row == s.Row)
+                        int tempRow = s.Row;
+                        int tempColumn = s.Column;
+                        if (tempRow == square.Row && tempColumn == square.Column)
                         {
                             b.Content = "Pawn";
                             break;
                         }
                     }
-                    selectedpawn = null;
+                    
                 }
                     
             }
